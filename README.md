@@ -101,3 +101,67 @@ graph TD
 
 ```
 
+## Tech Stack
+
+Deep Learning: PyTorch, Torchvision (ResNet-50)
+
+RAG & NLP: Sentence-Transformers (all-MiniLM-L6-v2), ChromaDB, Groq API (Llama-3-8B)
+
+Backend: FastAPI, Uvicorn, Pydantic
+
+Frontend: Streamlit
+
+DevOps: Docker, Docker Compose
+
+
+
+## Getting Started
+
+Prerequisites
+Docker & Docker Desktop
+
+Groq API Key
+
+Installation (Via Docker)
+The easiest way to run the system in an isolated environment.
+
+Clone the repository:
+
+Clone the repository:
+
+Bash
+git clone [https://github.com/YOUR_USERNAME/Vision-RAG-AgriSystem.git](https://github.com/YOUR_USERNAME/Vision-RAG-AgriSystem.git)
+cd Vision-RAG-AgriSystem
+
+
+2. **Set up Environment Variables:**
+   Create a `.env` file in the root directory and add your API key:
+   ```env
+   GROQ_API_KEY=your_groq_api_key_here
+   
+Build and Run:
+
+
+Bash
+docker build -t agri-vision-system .
+docker run -p 8000:8000 -p 8501:8501 agri-vision-system
+Local Development (Without Docker)
+Bash
+
+# 1. Create and activate virtual environment
+
+python -m venv agri_env
+source agri_env/bin/activate  # On Windows: .\agri_env\Scripts\activate
+
+# 2. Install dependencies
+
+pip install -r requirements.txt
+
+# 3. Run the FastAPI Backend
+
+uvicorn api.main:app --reload --port 8000
+
+# 4. Run the Streamlit Frontend (In a new terminal)
+
+streamlit run app/frontend.py
+
