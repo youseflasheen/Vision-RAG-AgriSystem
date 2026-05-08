@@ -148,20 +148,35 @@ docker run -p 8000:8000 -p 8501:8501 agri-vision-system
 Local Development (Without Docker)
 Bash
 
-# 1. Create and activate virtual environment
+### 1. Create and activate virtual environment
 
 python -m venv agri_env
 source agri_env/bin/activate  # On Windows: .\agri_env\Scripts\activate
 
-# 2. Install dependencies
+### 2. Install dependencies
 
 pip install -r requirements.txt
 
-# 3. Run the FastAPI Backend
+### 3. Run the FastAPI Backend
 
 uvicorn api.main:app --reload --port 8000
 
-# 4. Run the Streamlit Frontend (In a new terminal)
+### 4. Run the Streamlit Frontend (In a new terminal)
 
 streamlit run app/frontend.py
 
+
+## Project Structure
+
+```
+├── api/                  # FastAPI application & routes
+├── app/                  # Streamlit frontend UI
+├── data/                 # Raw and processed datasets (Ignored in Git)
+├── models/               # PyTorch model weights (.pth) (Ignored in Git)
+├── vector_db/            # ChromaDB local persistence (Ignored in Git)
+├── knowledge_base/       # JSON files with expert agricultural data
+├── Dockerfile            # Container configuration
+├── requirements.txt      # Python dependencies
+└── README.md
+
+```
