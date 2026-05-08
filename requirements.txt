@@ -1,0 +1,24 @@
+# Vision & ML
+torch
+torchvision
+opencv-python
+numpy
+pandas
+scikit-learn
+Pillow
+
+# RAG & LLM
+langchain
+chromadb
+sentence-transformers
+openai
+python-dotenv
+groq
+
+# Backend & API
+fastapi
+uvicorn
+python-multipart
+
+# Frontend Dashboard
+streamlit

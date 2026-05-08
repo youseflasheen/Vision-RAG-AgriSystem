@@ -1,0 +1,170 @@
+[
+    {
+        "class_name": "Apple___Apple_scab",
+        "crop": "Apple",
+        "disease": "Apple Scab",
+        "symptoms": "Olive-green to black velvety spots on leaves and fruit. Leaves may drop early.",
+        "treatment": "Use fungicides like Captan or Mancozeb. Prune to improve air circulation.",
+        "prevention": "Rake and destroy fallen leaves. Plant resistant varieties."
+    },
+    {
+        "class_name": "Apple___Black_rot",
+        "crop": "Apple",
+        "disease": "Black Rot",
+        "symptoms": "Purple spots on leaves (frogeye), reddish-brown rot on fruit, and cankers on limbs.",
+        "treatment": "Prune out dead wood and cankers. Apply thiophanate-methyl fungicides.",
+        "prevention": "Remove mummified fruit and debris from the orchard."
+    },
+    {
+        "class_name": "Apple___Cedar_apple_rust",
+        "crop": "Apple",
+        "disease": "Cedar Apple Rust",
+        "symptoms": "Bright orange or yellow spots on the upper leaf surface. Tube-like structures on the underside.",
+        "treatment": "Apply fungicides like Myclobutanil at the pink bud stage.",
+        "prevention": "Remove nearby eastern red cedar trees if possible."
+    },
+    {
+        "class_name": "Cherry___Powdery_mildew",
+        "crop": "Cherry",
+        "disease": "Powdery Mildew",
+        "symptoms": "White, powdery patches of fungus on leaves and fruit. Leaves may curl upward.",
+        "treatment": "Apply sulfur or potassium bicarbonate fungicides early in the season.",
+        "prevention": "Prune for better light and air penetration. Avoid excessive nitrogen."
+    },
+    {
+        "class_name": "Corn___Common_rust",
+        "crop": "Corn",
+        "disease": "Common Rust",
+        "symptoms": "Cinnamon-brown pustules on both leaf surfaces that eventually turn black.",
+        "treatment": "Apply foliar fungicides like Pyraclostrobin if infection is severe.",
+        "prevention": "Use resistant corn hybrids and avoid overhead irrigation."
+    },
+    {
+        "class_name": "Corn___Gray_leaf_spot",
+        "crop": "Corn",
+        "disease": "Gray Leaf Spot",
+        "symptoms": "Rectangular, gray to tan leaf lesions that run parallel to the leaf veins.",
+        "treatment": "Apply fungicides like Azoxystrobin during the silking stage.",
+        "prevention": "Rotate crops and use tilling to bury infected crop residue."
+    },
+    {
+        "class_name": "Corn___Northern_Leaf_Blight",
+        "crop": "Corn",
+        "disease": "Northern Leaf Blight",
+        "symptoms": "Large, cigar-shaped, grayish-green to tan lesions on the leaves.",
+        "treatment": "Apply fungicides like Propiconazole. Manage residue through tillage.",
+        "prevention": "Plant resistant hybrids and ensure balanced soil nutrition."
+    },
+    {
+        "class_name": "Grape___Black_rot",
+        "crop": "Grape",
+        "disease": "Black Rot",
+        "symptoms": "Small brown spots on leaves. Berries turn into hard, black, shriveled mummies.",
+        "treatment": "Apply fungicides containing Mancozeb or Myclobutanil. Prune infected parts.",
+        "prevention": "Keep vines off the ground and ensure full sun exposure."
+    },
+    {
+        "class_name": "Grape___Esca_(Black_Measles)",
+        "crop": "Grape",
+        "disease": "Esca (Black Measles)",
+        "symptoms": "Interveinal yellowing of leaves (tiger-stripe). Dark spots on berry skin.",
+        "treatment": "No effective chemical cure. Prune and protect large pruning wounds.",
+        "prevention": "Use clean planting stock and avoid water stress in vines."
+    },
+    {
+        "class_name": "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)",
+        "crop": "Grape",
+        "disease": "Leaf Blight",
+        "symptoms": "Irregular reddish-brown spots on leaves. Severe cases lead to leaf drop.",
+        "treatment": "Apply fungicides like Bordeaux mixture or Copper oxychloride.",
+        "prevention": "Ensure proper vine spacing and destroy fallen leaves in winter."
+    },
+    {
+        "class_name": "Peach___Bacterial_spot",
+        "crop": "Peach",
+        "disease": "Bacterial Spot",
+        "symptoms": "Small, water-soaked spots on leaves that turn brown and fall out (shot-hole).",
+        "treatment": "Apply Copper-based sprays during dormancy or early spring.",
+        "prevention": "Avoid highly susceptible varieties and use windbreaks."
+    },
+    {
+        "class_name": "Pepper_bell___Bacterial_spot",
+        "crop": "Pepper",
+        "disease": "Bacterial Spot",
+        "symptoms": "Small, dark, circular spots on leaves and fruit. Leaves turn yellow and drop.",
+        "treatment": "Use Copper-based fungicides. Remove and destroy infected debris.",
+        "prevention": "Use certified pathogen-free seeds and rotate crops annually."
+    },
+    {
+        "class_name": "Potato___Early_blight",
+        "crop": "Potato",
+        "disease": "Early Blight",
+        "symptoms": "Small dark spots on older leaves with concentric rings (target-like).",
+        "treatment": "Apply fungicides containing Chlorothalonil. Maintain high soil fertility.",
+        "prevention": "Rotate crops with non-solanaceous plants and avoid overhead watering."
+    },
+    {
+        "class_name": "Potato___Late_blight",
+        "crop": "Potato",
+        "disease": "Late Blight",
+        "symptoms": "Dark green water-soaked spots on leaves. White fungal growth on undersides.",
+        "treatment": "Apply fungicides like Metalaxyl immediately. Destroy infected plants.",
+        "prevention": "Use disease-free seed potatoes. Eliminate cull piles."
+    },
+    {
+        "class_name": "Strawberry___Leaf_scorch",
+        "crop": "Strawberry",
+        "disease": "Leaf Scorch",
+        "symptoms": "Small purplish spots on the upper leaf surface that enlarge into irregular blotches.",
+        "treatment": "Apply fungicides like Thiophanate-methyl if severe. Remove old leaves.",
+        "prevention": "Plant in well-drained soil and avoid excessive nitrogen application."
+    },
+    {
+        "class_name": "Tomato___Bacterial_spot",
+        "crop": "Tomato",
+        "disease": "Bacterial Spot",
+        "symptoms": "Small, dark, water-soaked spots on leaves and fruit. Leaves turn yellow.",
+        "treatment": "Apply Copper-based fungicides. Disinfect tools frequently.",
+        "prevention": "Avoid working in the field when plants are wet. Use clean seeds."
+    },
+    {
+        "class_name": "Tomato___Early_blight",
+        "crop": "Tomato",
+        "disease": "Early Blight",
+        "symptoms": "Dark, concentric spots on lower leaves. May lead to stem lesions.",
+        "treatment": "Apply fungicides containing Copper. Remove lower infected foliage.",
+        "prevention": "Mulch to prevent soil-to-leaf contact and space plants properly."
+    },
+    {
+        "class_name": "Tomato___Late_blight",
+        "crop": "Tomato",
+        "disease": "Late Blight",
+        "symptoms": "Large, dark water-soaked patches on leaves. Fruit turns hard and brown.",
+        "treatment": "Immediate application of protective fungicides. Burn infected plants.",
+        "prevention": "Use resistant varieties and maintain low humidity in greenhouses."
+    },
+    {
+        "class_name": "Tomato___Leaf_Mold",
+        "crop": "Tomato",
+        "disease": "Leaf Mold",
+        "symptoms": "Pale greenish-yellow spots on upper leaf surfaces. Olive-green mold on undersides.",
+        "treatment": "Apply fungicides like Difenoconazole. Improve greenhouse ventilation.",
+        "prevention": "Reduce humidity below 85% and use drip irrigation instead of spray."
+    },
+    {
+        "class_name": "Tomato___Septoria_leaf_spot",
+        "crop": "Tomato",
+        "disease": "Septoria Leaf Spot",
+        "symptoms": "Small, circular spots with dark margins and gray/tan centers on lower leaves.",
+        "treatment": "Apply Copper or Chlorothalonil fungicides. Remove infected leaves.",
+        "prevention": "Destroy all plant debris at the end of the season. Use stakes."
+    },
+    {
+        "class_name": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+        "crop": "Tomato",
+        "disease": "Yellow Leaf Curl Virus",
+        "symptoms": "Severe stunting. Leaves curl upward and turn bright yellow between veins.",
+        "treatment": "No chemical cure for the virus. Control the whitefly population.",
+        "prevention": "Use insect nets and yellow sticky traps to catch whiteflies."
+    }
+]

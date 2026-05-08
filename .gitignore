@@ -1,0 +1,43 @@
+# Environments
+.env
+venv/
+env/
+agri_env/
+.venv/
+
+# Python Cache & Optimization
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Data & Models (Heavy or sensitive files)
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.h5
+vector_db/
+data/dataset/
+
+# Distribution / Build
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.swp
+*.sublime-project
+*.sublime-workspace
+
+# OS Specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
