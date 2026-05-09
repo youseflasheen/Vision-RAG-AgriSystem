@@ -1,0 +1,530 @@
+<mxfile host="65bd71144e">
+    <diagram id="single" name="Class Diagram">
+        <mxGraphModel dx="1200" dy="2824" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2800" pageHeight="1800" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="DataCollector" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;DataCollector&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- raw_dir : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- data : List = []&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ collect() : List&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ validate() : bool&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ split(test_ratio : float) : Tuple&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#8E6A7A;" parent="1" vertex="1">
+                    <mxGeometry x="2100" y="200" width="280" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="ImageData" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;ImageData&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- image_path : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- image_array : np.ndarray = None&lt;/b&gt;&lt;br&gt;&lt;b&gt;- label : str = &quot;&quot;&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ load(filepath : str) : ImageData&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ resize(width : int, height : int) : ImageData&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#5B7DA5;" parent="1" vertex="1">
+                    <mxGeometry x="2500" y="500" width="280" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="Preprocessor" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Preprocessor&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- img_size : int = 224&lt;/b&gt;&lt;br&gt;&lt;b&gt;- mean : Tuple = ()&lt;/b&gt;&lt;br&gt;&lt;b&gt;- std : Tuple = ()&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ resize(img : ImageData) : ImageData&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ normalize(img : ImageData) : ImageData&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ augment(img : ImageData) : ImageData&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#8E6A7A;" parent="1" vertex="1">
+                    <mxGeometry x="2080" y="490" width="280" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="PestClassifier" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;PestClassifier&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- model : nn.Module = None&lt;/b&gt;&lt;br&gt;&lt;b&gt;- num_classes : int = 0&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ forward(x : Tensor) : Tensor&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ predict(image : ImageData) : Prediction&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ train(data : Dataset) : None&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#5B7DA5;" parent="1" vertex="1">
+                    <mxGeometry x="1810" y="805" width="280" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="Prediction" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Prediction&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- pest_class : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- confidence : float = 0.0&lt;/b&gt;&lt;br&gt;&lt;b&gt;- top_k : List = []&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ get_top_n(count : int) : List&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#6A8F74;" parent="1" vertex="1">
+                    <mxGeometry x="1550" y="1090" width="280" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="ResNetBackbone" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;ResNetBackbone&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- backbone : nn.Module = None&lt;/b&gt;&lt;br&gt;&lt;b&gt;- classifier : nn.Linear = None&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#BBDEFB;strokeColor=#5B7DA5;" parent="1" vertex="1">
+                    <mxGeometry x="1880" y="1280" width="280" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="PestGAN" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;PestGAN&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- generator : Generator = None&lt;/b&gt;&lt;br&gt;&lt;b&gt;- discriminator : Discriminator = None&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ generate(num_samples : int) : List&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ train_step(real : Tensor) : float&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#8E6AA5;" parent="1" vertex="1">
+                    <mxGeometry x="2200" y="800" width="280" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="Generator" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Generator&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- latent_dim : int = 100&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ forward(z : Tensor) : Tensor&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ generate_image() : ImageData&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#8E6AA5;" parent="1" vertex="1">
+                    <mxGeometry x="2100" y="1100" width="280" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="Discriminator" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Discriminator&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- img_shape : Tuple = ()&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ forward(img : Tensor) : Tensor&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ classify(img : Tensor) : float&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#8E6AA5;" parent="1" vertex="1">
+                    <mxGeometry x="2400" y="1100" width="280" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="PestChatbot" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;PestChatbot&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- model : LLM = None&lt;/b&gt;&lt;br&gt;&lt;b&gt;- context : List = []&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-bottom:5px;text-align:center;&quot;&gt;&lt;b&gt;+ ask(query : str) : ChatResponse&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ load_knowledge(docs : List) : None&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#9C8A53;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="200" width="280" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="PromptTemplate" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;PromptTemplate&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- template : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- variables : List = []&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ format(variables : Dict) : str&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ validate() : bool&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFECB3;strokeColor=#A98B3D;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="500" width="280" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="ChatResponse" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;ChatResponse&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- answer : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- sources : List = []&lt;/b&gt;&lt;br&gt;&lt;b&gt;- confidence : float = 0.0&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ get_answer() : str&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#A68A5D;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="500" width="280" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="PestRAG" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;PestRAG&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- embedder : Embedder = None&lt;/b&gt;&lt;br&gt;&lt;b&gt;- vector_db : FAISS = None&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ retrieve(query : str) : List&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ add_documents(docs : List) : None&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F2F1;strokeColor=#6E9A95;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="500" width="280" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="Embedder" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Embedder&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- model : SentenceTransformer = None&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ embed(text : str) : Tensor&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ embed_batch(texts : List) : Tensor&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B2DFDB;strokeColor=#6E9A95;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="800" width="280" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="PestSimulator" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;PestSimulator&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- classifier : PestClassifier = None&lt;/b&gt;&lt;br&gt;&lt;b&gt;- env : Environment = None&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ run_scenario(params : Dict) : Dict&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ predict_spread(days : int) : Dict&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FBE9E7;strokeColor=#A07C71;" parent="1" vertex="1">
+                    <mxGeometry x="1600" y="200" width="280" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="Environment" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Environment&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- temperature : float = 0.0&lt;/b&gt;&lt;br&gt;&lt;b&gt;- humidity : float = 0.0&lt;/b&gt;&lt;br&gt;&lt;b&gt;- soil_moisture : float = 0.0&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ get_conditions() : Dict&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE0B2;strokeColor=#A07C71;" parent="1" vertex="1">
+                    <mxGeometry x="1600" y="500" width="280" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="DecisionEngine" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;DecisionEngine&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- rules : Dict = {}&lt;/b&gt;&lt;br&gt;&lt;b&gt;- weights : Dict = {}&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ evaluate(pred : Prediction) : Recommendation&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ recommend_actions() : List&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EDE7F6;strokeColor=#84729B;" parent="1" vertex="1">
+                    <mxGeometry x="1100" y="200" width="280" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="Rule" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Rule&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- name : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- condition : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- action : Action = None&lt;/b&gt;&lt;br&gt;&lt;b&gt;- weight : float = 1.0&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ matches(prediction : Prediction) : bool&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#D1C4E9;strokeColor=#84729B;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="500" width="280" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="Recommendation" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Recommendation&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- priority : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- actions : List = []&lt;/b&gt;&lt;br&gt;&lt;b&gt;- confidence : float = 0.0&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ get_best_action() : Action&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8EAF6;strokeColor=#84729B;" parent="1" vertex="1">
+                    <mxGeometry x="1260" y="890" width="280" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="Action" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Action&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- name : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- description : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- cost : float = 0.0&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ estimate_effectiveness() : float&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#C5CAE9;strokeColor=#84729B;" parent="1" vertex="1">
+                    <mxGeometry x="1120" y="1200" width="280" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="DashboardApp" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;DashboardApp&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- components : Dict = {}&lt;/b&gt;&lt;br&gt;&lt;b&gt;- state : Dict = {}&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ render() : None&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ update(data : Dict) : None&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F1F8E9;strokeColor=#879B75;" parent="1" vertex="1">
+                    <mxGeometry x="1300" y="-100" width="280" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="Component" value="&lt;div style=&quot;text-align:center;font-weight:bold;border-bottom:1px solid #000;padding-bottom:5px;margin-bottom:5px;&quot;&gt;Component&lt;/div&gt;&lt;div style=&quot;padding:5px 0;&quot;&gt;&lt;b&gt;- type : str = &quot;&quot;&lt;/b&gt;&lt;br&gt;&lt;b&gt;- config : Dict = {}&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;border-top:1px solid #000;padding-top:5px;margin-top:5px;text-align:center;&quot;&gt;&lt;b&gt;+ draw() : None&lt;/b&gt;&lt;br&gt;&lt;b&gt;+ refresh() : None&lt;/b&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DCEDC8;strokeColor=#879B75;" parent="1" vertex="1">
+                    <mxGeometry x="1800" y="-100" width="280" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_data1" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DataCollector" target="ImageData" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_data1_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_data1_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data1" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_data1_role" value="creates" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data1" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_data2" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DataCollector" target="Preprocessor" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_data2_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data2" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_data2_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data2" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_data2_role" value="uses" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data2" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_data3" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="Preprocessor" target="ImageData" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_data3_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data3" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_data3_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data3" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_data3_role" value="modifies" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_data3" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml1" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=1;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestClassifier" target="ResNetBackbone" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_ml1_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml1_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml1" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml1_role" value="owns" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml1" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml2" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestClassifier" target="ImageData" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_ml2_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml2" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml2_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml2" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml2_role" value="analyzes" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml2" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml3" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestClassifier" target="Prediction" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_ml3_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml3" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml3_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml3" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml3_role" value="produces" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml3" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml4" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=1;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestGAN" target="Generator" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_ml4_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml4" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml4_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml4" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml4_role" value="owns" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml4" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml5" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=1;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestGAN" target="Discriminator" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_ml5_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml5" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml5_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml5" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml5_role" value="owns" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml5" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml6" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestGAN" target="ImageData" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_ml6_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml6" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml6_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml6" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_ml6_role" value="generates" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_ml6" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c1" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=0;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestChatbot" target="PromptTemplate" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_c1_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c1_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c1" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c1_role" value="formats" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c1" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c2" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestChatbot" target="ChatResponse" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_c2_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c2" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c2_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c2" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c2_role" value="produces" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c2" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c3" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=1;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestRAG" target="Embedder" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_c3_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c3" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c3_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c3" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_c3_role" value="owns" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_c3" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_c4" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=0;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestChatbot" target="PestRAG" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="new_c4_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_c4" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_c4_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_c4" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_c4_role" value="uses" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_c4" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_c5" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestChatbot" target="DecisionEngine" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="new_c5_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_c5" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_c5_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_c5" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_c5_role" value="queries" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_c5" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_s1" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=0;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestSimulator" target="Environment" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_s1_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_s1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_s1_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_s1" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_s1_role" value="simulates" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_s1" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_s2" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="PestSimulator" target="PestClassifier" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1930" y="520"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_s2_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_s2" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_s2_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_s2" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_s2_role" value="calls" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_s2" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint x="16" y="-4" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d1" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=0;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DecisionEngine" target="Rule" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_d1_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d1_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d1" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d1_role" value="evaluates" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d1" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d2" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DecisionEngine" target="Recommendation" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_d2_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d2" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d2_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d2" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d2_role" value="produces" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d2" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d3" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=1;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="Recommendation" target="Action" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_d3_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d3" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d3_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d3" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d3_role" value="contains" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d3" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d4" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DecisionEngine" target="Prediction" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_d4_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d4" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d4_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d4" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_d4_role" value="processes" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_d4" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash1" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamond;startFill=0;endArrow=none;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DashboardApp" target="Component" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_dash1_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash1_tgt" value="1..*" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash1" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash1_role" value="manages" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash1" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash2" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DashboardApp" target="DecisionEngine" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_dash2_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash2" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash2_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash2" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash2_role" value="monitors" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash2" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash3" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DashboardApp" target="PestChatbot" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_dash3_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash3" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash3_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash3" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash3_role" value="interfaces" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash3" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash4" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DashboardApp" target="PestSimulator" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e_dash4_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash4" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash4_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash4" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e_dash4_role" value="controls" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="e_dash4" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_dash5" value="" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;jumpStyle=arc;jumpSize=15;strokeWidth=2;strokeColor=#000000;" parent="1" source="DashboardApp" target="DataCollector" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="new_dash5_src" value="1" style="edgeLabel;html=1;align=left;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_dash5" vertex="1" connectable="0">
+                    <mxGeometry x="-0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_dash5_tgt" value="1" style="edgeLabel;html=1;align=right;verticalAlign=top;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_dash5" vertex="1" connectable="0">
+                    <mxGeometry x="0.7" y="25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="new_dash5_role" value="triggers" style="edgeLabel;html=1;align=center;verticalAlign=bottom;resizable=0;points=[];fontSize=11;fontColor=#000000;fontStyle=1;labelBackgroundColor=#FFFFFF;" parent="new_dash5" vertex="1" connectable="0">
+                    <mxGeometry y="-25" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

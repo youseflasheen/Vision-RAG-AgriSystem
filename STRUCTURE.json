@@ -1,0 +1,17 @@
+{
+  "src/lab1_chatbot": "Domain Q&A chatbot implementation",
+  "src/lab2_prompts": "Prompt engineering templates",
+  "src/lab3_data": "Data collection and preprocessing",
+  "src/lab4_rag": "Retrieval Augmented Generation system",
+  "src/lab5_model": "Predictive ML model",
+  "src/lab6_gan": "Synthetic data generation",
+  "src/lab7_simulation": "Scenario simulation",
+  "src/lab8_dashboard": "Visualization dashboard",
+  "src/lab9_dss": "Decision support system",
+  "data/raw": "Original datasets",
+  "data/processed": "Preprocessed data",
+  "data/synthetic": "AI-generated data",
+  "models": "Trained model files",
+  "docs": "Project documentation",
+  "tests": "Unit and integration tests"
+}
