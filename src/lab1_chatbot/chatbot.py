@@ -6,28 +6,23 @@ so farmers can ask follow-up questions naturally.
 
 Dependencies:
     - src/lab2_prompts/prompt_templates.py  (Lab 2)
-    - src/rag/vector_store.py               (Lab 4)
+    - src/lab4_rag/vector_store.py          (Lab 4)
     - GROQ_API_KEY environment variable
 """
 
 import os
-import sys
 from typing import Optional
 
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 
-# Lab 2 — prompt templates
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from src.lab2_prompts.prompt_templates import (
     build_chatbot_system_prompt,
     build_followup_prompt,
     build_disease_analysis_prompt,
 )
-
-# Lab 4 — RAG retriever
-from src.rag.vector_store import AgriculturalVectorDB
+from src.lab4_rag.vector_store import AgriculturalVectorDB
 
 
 def _load_environment_variables() -> None:
@@ -41,7 +36,6 @@ def _load_environment_variables() -> None:
     candidate_files = [
         os.path.join(project_root, ".env"),
         os.path.join(project_root, ".env.local"),
-        os.path.join(project_root, "landing", ".env.local"),
     ]
     for candidate in candidate_files:
         if os.path.exists(candidate):
@@ -141,7 +135,6 @@ class AgriculturalChatbot:
                 if message_dict["role"] == "user":
                     messages.append(HumanMessage(content=message_dict["content"]))
                 else:
-                    from langchain_core.messages import AIMessage
                     messages.append(AIMessage(content=message_dict["content"]))
 
         response = self.llm.invoke(messages)
@@ -160,9 +153,6 @@ class AgriculturalChatbot:
         confidence: float,
     ) -> str:
         """Generate an expert report for a Lab 5 model detection.
-
-        Called by the dashboard when a user uploads an image and gets
-        a prediction — produces the structured 4-section analysis.
 
         Args:
             disease_class: PlantVillage class name from ResNet-50.

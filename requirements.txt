@@ -1,24 +1,15 @@
-# Vision & ML
+fastapi[standard]
+uvicorn
+streamlit
 torch
 torchvision
-opencv-python
-numpy
+pillow
 pandas
-scikit-learn
-Pillow
-
-# RAG & LLM
+plotly
 langchain
-chromadb
+langchain-community
+langchain-groq
 sentence-transformers
-openai
+chromadb
 python-dotenv
-groq
-
-# Backend & API
-fastapi
-uvicorn
-python-multipart
-
-# Frontend Dashboard
-streamlit
+numpy

@@ -1,11 +1,10 @@
 """Streamlit dashboard — AgriVision AI visualization layer.
 
-AgriVision AI — complete redesign with tab-based navigation,
-professional dark agricultural theme, and healthy-plant awareness.
+AgriVision AI — The Ultimate Premium UI.
+Pushing Streamlit to its absolute visual limits using advanced CSS injection.
 
 Run with:
     streamlit run app/frontend.py
-(FastAPI backend must be running on port 8000 first)
 """
 
 import streamlit as st
@@ -14,10 +13,9 @@ import plotly.graph_objects as go
 from PIL import Image
 import pandas as pd
 from typing import Optional
-import io
 
 # ---------------------------------------------------------------------------
-# Page configuration — must be first Streamlit call
+# Page configuration MUST be the first Streamlit command
 # ---------------------------------------------------------------------------
 st.set_page_config(
     page_title="AgriVision AI",
@@ -27,1044 +25,499 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------------------------------
-# Global CSS — full redesign
+# ULTIMATE PREMIUM CSS INJECTION
+# ---------------------------------------------------------------------------
+# This block completely hijacks Streamlit's native styling to create
+# a breathtaking, ultra-modern SaaS UI (Apple/Vercel aesthetic).
 # ---------------------------------------------------------------------------
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+/* 1. Global Typography & Background */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
-/* ── Reset & base ── */
-* { box-sizing: border-box; }
-html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
-    background-color: #0d1117;
-    color: #e6edf3;
+html, body {
+    font-family: 'Inter', sans-serif !important;
 }
-.main .block-container {
-    padding: 0 2rem 3rem 2rem;
-    max-width: 1200px;
+/* Apply font to elements but explicitly exclude Streamlit icons to prevent text overlap */
+div[class*="st-"]:not([class*="stIcon"]):not([class*="material"]) {
+    font-family: 'Inter', sans-serif;
 }
 
-/* ── Hide default Streamlit chrome ── */
-#MainMenu, footer, header { visibility: hidden; }
-[data-testid="collapsedControl"] { display: none; }
-section[data-testid="stSidebar"] { display: none; }
-
-/* ── Top navigation bar ── */
-.nav-bar {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    padding: 0 0 0 0;
-    margin: 0 -2rem 2rem -2rem;
-    background: #161b22;
-    border-bottom: 1px solid #21262d;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-.nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 24px;
-    border-right: 1px solid #21262d;
-    text-decoration: none;
-    white-space: nowrap;
-}
-.nav-logo-icon { font-size: 22px; }
-.nav-logo-text {
-    font-size: 15px;
-    font-weight: 700;
-    color: #58d68d;
-    letter-spacing: -0.3px;
-}
-.nav-tabs {
-    display: flex;
-    gap: 0;
-    flex: 1;
-    overflow-x: auto;
-    scrollbar-width: none;
-}
-.nav-tabs::-webkit-scrollbar { display: none; }
-.nav-tab {
-    padding: 14px 20px;
-    font-size: 13px;
-    font-weight: 500;
-    color: #8b949e;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    white-space: nowrap;
-    transition: all 0.15s ease;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-.nav-tab:hover { color: #e6edf3; background: #1c2128; }
-.nav-tab.active { color: #58d68d; border-bottom-color: #58d68d; }
-.nav-status {
-    padding: 14px 24px;
-    font-size: 12px;
-    color: #8b949e;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-    border-left: 1px solid #21262d;
-}
-.status-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #e74c3c;
-}
-.status-dot.online { background: #58d68d; animation: pulse 2s infinite; }
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+/* Deep space gradient background */
+.stApp {
+    background: radial-gradient(circle at top center, #18181b 0%, #09090b 100%) !important;
+    background-attachment: fixed !important;
 }
 
-/* ── Page header ── */
-.page-header {
-    margin-bottom: 2rem;
-    padding-top: 1.5rem;
-}
-.page-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: #e6edf3;
-    margin: 0 0 6px 0;
-    letter-spacing: -0.5px;
-}
-.page-subtitle {
-    font-size: 14px;
-    color: #8b949e;
-    margin: 0;
-    font-weight: 400;
-}
+/* Hide standard Streamlit chrome */
+header[data-testid="stHeader"] { background: transparent !important; }
+footer { display: none !important; }
 
-/* ── Cards ── */
-.card {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 10px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
+/* 2. Stunning Tabs (Segmented Control style) */
+[data-testid="stTabs"] {
+    margin-top: 1rem;
 }
-.card-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: #8b949e;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+[data-baseweb="tab-list"] {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 100px !important;
+    padding: 6px !important;
+    gap: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5) !important;
 }
-.card-title-icon { font-size: 14px; }
-
-/* ── Detection result ── */
-.disease-name {
-    font-size: 24px;
-    font-weight: 700;
-    color: #e6edf3;
-    margin: 4px 0 16px 0;
-    letter-spacing: -0.4px;
-}
-.confidence-bar-bg {
-    height: 6px;
-    background: #21262d;
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 6px;
-}
-.confidence-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.6s ease;
-}
-.confidence-meta {
-    font-size: 12px;
-    color: #8b949e;
-    font-family: 'DM Mono', monospace;
-}
-
-/* ── Badges ── */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-}
-.badge-high { background: #3d1a1a; color: #f87171; border: 1px solid #7f1d1d; }
-.badge-medium { background: #2d2007; color: #fbbf24; border: 1px solid #78350f; }
-.badge-low { background: #0d2818; color: #4ade80; border: 1px solid #14532d; }
-.badge-none { background: #0d2818; color: #4ade80; border: 1px solid #14532d; }
-.badge-healthy { background: #0d2818; color: #4ade80; border: 1px solid #14532d; }
-
-/* ── Urgency banner ── */
-.urgency-banner {
-    padding: 12px 18px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-.urgency-high { background: #1c0a0a; border: 1px solid #7f1d1d; color: #fca5a5; }
-.urgency-medium { background: #1c1408; border: 1px solid #78350f; color: #fcd34d; }
-.urgency-low { background: #081c10; border: 1px solid #14532d; color: #86efac; }
-.urgency-none { background: #081c10; border: 1px solid #14532d; color: #86efac; }
-
-/* ── Recommendation box ── */
-.rec-box {
-    background: #0d2818;
-    border: 1px solid #14532d;
-    border-left: 3px solid #4ade80;
-    border-radius: 8px;
-    padding: 18px 20px;
-    margin-top: 16px;
-}
-.rec-strategy {
-    font-size: 18px;
-    font-weight: 700;
-    color: #4ade80;
-    margin-bottom: 8px;
-}
-.rec-summary { font-size: 13px; color: #a7f3d0; line-height: 1.6; }
-.rec-meta {
-    font-size: 12px;
-    color: #6ee7b7;
-    font-family: 'DM Mono', monospace;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #14532d;
-}
-
-/* ── Pipeline steps (landing) ── */
-.pipeline-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin: 24px 0;
-}
-.pipeline-step {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    transition: border-color 0.2s;
-}
-.pipeline-step:hover { border-color: #58d68d; }
-.pipeline-icon { font-size: 28px; margin-bottom: 10px; }
-.pipeline-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #e6edf3;
-    margin-bottom: 5px;
-}
-.pipeline-desc { font-size: 11px; color: #8b949e; line-height: 1.5; }
-
-/* ── Module info grid ── */
-.lab-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-}
-.lab-card {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 8px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    transition: border-color 0.2s;
-}
-.lab-card:hover { border-color: #30363d; }
-.lab-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #58d68d;
-    margin-top: 5px;
-    flex-shrink: 0;
-}
-.lab-name { font-size: 13px; font-weight: 600; color: #e6edf3; margin-bottom: 3px; }
-.lab-desc { font-size: 11px; color: #8b949e; line-height: 1.4; }
-
-/* ── Metrics row ── */
-.metrics-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 16px;
-}
-.metric-card {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 8px;
-    padding: 16px 18px;
-}
-.metric-label { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
-.metric-value { font-size: 22px; font-weight: 700; color: #e6edf3; }
-.metric-delta { font-size: 11px; color: #4ade80; margin-top: 3px; font-family: 'DM Mono', monospace; }
-
-/* ── Table styling ── */
-[data-testid="stDataFrame"] {
-    border: 1px solid #21262d !important;
-    border-radius: 8px !important;
-    overflow: hidden;
-}
-
-/* ── Upload area ── */
-[data-testid="stFileUploader"] {
-    background: #161b22 !important;
-    border: 1px dashed #30363d !important;
-    border-radius: 10px !important;
-}
-
-/* ── Buttons ── */
-.stButton > button {
-    background: #238636 !important;
-    color: white !important;
-    border: 1px solid #2ea043 !important;
-    border-radius: 6px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-weight: 600 !important;
-    font-size: 14px !important;
+[data-baseweb="tab"] {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 100px !important;
+    color: #a1a1aa !important;
+    font-weight: 500 !important;
     padding: 10px 24px !important;
-    transition: all 0.15s !important;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
-.stButton > button:hover {
-    background: #2ea043 !important;
-    transform: translateY(-1px);
+[data-baseweb="tab"]:hover {
+    color: #f4f4f5 !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+[data-baseweb="tab"][aria-selected="true"] {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%) !important;
+    color: #10b981 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2) !important;
+}
+/* Hide the ugly default active indicator line */
+[data-baseweb="tab-highlight"] { display: none !important; }
+
+/* 3. Glassmorphism Metrics (Cards) */
+[data-testid="stMetric"] {
+    background: rgba(24, 24, 27, 0.4) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 20px !important;
+    padding: 24px !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
+    transition: all 0.4s ease !important;
+}
+[data-testid="stMetric"]:hover {
+    transform: translateY(-5px) !important;
+    border: 1px solid rgba(16, 185, 129, 0.5) !important;
+    box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.15) !important;
+}
+[data-testid="stMetricValue"] {
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 100%);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+[data-testid="stMetricLabel"] {
+    font-size: 0.9rem !important;
+    color: #a1a1aa !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    margin-bottom: 8px !important;
 }
 
-/* ── Expander ── */
+/* 4. Glow Buttons */
+button[kind="primary"] {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3), 0 4px 6px -1px rgba(0,0,0,0.2) !important;
+    transition: all 0.3s ease !important;
+}
+button[kind="primary"]:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.6), 0 8px 15px -3px rgba(0,0,0,0.3) !important;
+}
+
+/* 5. Typography Enhancements */
+h1 {
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+    background: linear-gradient(to right, #ffffff, #a1a1aa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem !important;
+}
+h2, h3 {
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    color: #f4f4f5 !important;
+}
+p, li {
+    color: #e4e4e7 !important;
+    line-height: 1.6 !important;
+}
+
+/* 6. File Uploader Styling */
+[data-testid="stFileUploadDropzone"] {
+    background: rgba(24, 24, 27, 0.3) !important;
+    border: 2px dashed rgba(255, 255, 255, 0.1) !important;
+    border-radius: 20px !important;
+    transition: all 0.3s ease !important;
+}
+[data-testid="stFileUploadDropzone"]:hover {
+    border: 2px dashed #10b981 !important;
+    background: rgba(16, 185, 129, 0.05) !important;
+}
+
+/* 7. Chat Bubbles */
+[data-testid="stChatMessage"] {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 16px !important;
+    padding: 16px !important;
+    margin-bottom: 12px !important;
+}
+[data-testid="stChatMessage"][data-author="user"] {
+    background: rgba(59, 130, 246, 0.05) !important;
+    border: 1px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+/* 8. Expander & Dataframe */
 [data-testid="stExpander"] {
-    background: #161b22 !important;
-    border: 1px solid #21262d !important;
-    border-radius: 8px !important;
+    background: rgba(24, 24, 27, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 16px !important;
+}
+[data-testid="stDataFrame"] {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-/* ── Healthy state ── */
-.healthy-banner {
-    background: #081c10;
-    border: 1px solid #14532d;
-    border-radius: 10px;
-    padding: 24px 28px;
-    text-align: center;
-    margin: 20px 0;
+/* Pulse Animation for status */
+@keyframes pulse {
+    0% { opacity: 0.5; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { opacity: 1; box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { opacity: 0.5; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
 }
-.healthy-icon { font-size: 48px; margin-bottom: 12px; }
-.healthy-title { font-size: 22px; font-weight: 700; color: #4ade80; margin-bottom: 8px; }
-.healthy-text { font-size: 14px; color: #86efac; line-height: 1.6; }
-
-/* ── GAN section ── */
-.gan-arch {
-    background: #161b22;
-    border: 1px solid #21262d;
-    border-radius: 10px;
-    padding: 20px 24px;
-    margin-bottom: 16px;
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: #10b981;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    margin-right: 8px;
+    vertical-align: middle;
 }
-.gan-flow {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    margin: 20px 0;
-    flex-wrap: wrap;
+.status-offline {
+    background: #ef4444;
+    animation: none;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
-.gan-box {
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 8px;
-    padding: 14px 18px;
-    text-align: center;
-    min-width: 120px;
-}
-.gan-box-title { font-size: 12px; font-weight: 600; color: #8b949e; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 4px; }
-.gan-box-name { font-size: 14px; font-weight: 700; color: #e6edf3; }
-.gan-arrow { font-size: 20px; color: #30363d; padding: 0 8px; }
-.gan-highlight { border-color: #58d68d; }
-.gan-highlight .gan-box-name { color: #58d68d; }
-
-/* ── Spinner override ── */
-[data-testid="stSpinner"] > div { border-top-color: #58d68d !important; }
-
-/* ── Divider ── */
-hr { border-color: #21262d !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
-# Constants
+# Constants & State
 # ---------------------------------------------------------------------------
 API_BASE_URL: str = "http://127.0.0.1:8000"
-FULL_ANALYSIS_ENDPOINT: str = f"{API_BASE_URL}/full_analysis/"
 
-TAB_NAMES = [
-    ("🔬", "Analyse", "analyse"),
-    ("🤖", "Chatbot", "chatbot"),
-    ("📊", "Simulation", "simulation"),
-    ("🧠", "Decision Support", "dss"),
-    ("🎨", "GAN Synthesis", "gan"),
-    ("📖", "About", "about"),
-]
-
-# ---------------------------------------------------------------------------
-# Session state init
-# ---------------------------------------------------------------------------
-if "active_tab" not in st.session_state:
-    st.session_state.active_tab = "analyse"
-if "analysis_result" not in st.session_state:
+if "analysis_result" not in st.session_state: 
     st.session_state.analysis_result = None
-if "chat_history" not in st.session_state:
+if "chat_history" not in st.session_state: 
     st.session_state.chat_history = []
 
-
 # ---------------------------------------------------------------------------
-# Helpers
+# Utils
 # ---------------------------------------------------------------------------
+@st.cache_data(ttl=5)
 def check_backend() -> bool:
-    try:
-        r = requests.get(f"{API_BASE_URL}/", timeout=2)
-        return r.status_code == 200
-    except Exception:
+    try: 
+        return requests.get(f"{API_BASE_URL}/", timeout=1).status_code == 200
+    except: 
         return False
 
-
-def run_full_analysis(uploaded_file) -> Optional[dict]:
-    files = {"file": (uploaded_file.name, uploaded_file.getvalue(), "image/jpeg")}
+def run_analysis(file) -> Optional[dict]:
     try:
-        r = requests.post(FULL_ANALYSIS_ENDPOINT, files=files, timeout=90)
-        if r.status_code == 200:
-            return r.json()
-        st.error(f"Backend returned error {r.status_code}: {r.text[:300]}")
-        return None
-    except requests.exceptions.ConnectionError:
-        st.error("Cannot reach the backend. Start it with: `uvicorn api.main:app --port 8000`")
-        return None
-    except requests.exceptions.Timeout:
-        st.error("Request timed out. The model may be loading — please try again.")
-        return None
-
-
-# ---------------------------------------------------------------------------
-# Navigation bar
-# ---------------------------------------------------------------------------
-def render_navbar(backend_online: bool) -> None:
-    tab_html = ""
-    for icon, label, key in TAB_NAMES:
-        active_cls = "active" if st.session_state.active_tab == key else ""
-        tab_html += (
-            f'<a class="nav-tab {active_cls}" '
-            f'onclick="window.location.href=\'?tab={key}\'" '
-            f'href="?tab={key}">{icon} {label}</a>'
+        r = requests.post(
+            f"{API_BASE_URL}/full_analysis/", 
+            files={"file": (file.name, file.getvalue(), "image/jpeg")}, 
+            timeout=120
         )
-
-    dot_cls = "online" if backend_online else ""
-    status_text = "API online" if backend_online else "API offline"
-
-    st.markdown(f"""
-    <div class="nav-bar">
-        <div class="nav-logo">
-            <span class="nav-logo-icon">🌿</span>
-            <span class="nav-logo-text">AgriVision AI</span>
-        </div>
-        <div class="nav-tabs">{tab_html}</div>
-        <div class="nav-status">
-            <div class="status-dot {dot_cls}"></div>
-            {status_text}
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
+        r.raise_for_status()
+        return r.json()
+    except Exception as e:
+        st.error(f"Analysis failed: {str(e)}")
+        return None
 
 # ---------------------------------------------------------------------------
-# Tab: Analyse (main pipeline)
+# Main Application
 # ---------------------------------------------------------------------------
-def render_analyse_tab(backend_online: bool) -> None:
-    st.markdown("""
-    <div class="page-header">
-        <p class="page-title">Crop Disease Analysis</p>
-        <p class="page-subtitle">Upload a leaf photo to run the full AI pipeline — detection, expert advice, simulation, and decision support.</p>
-    </div>
-    """, unsafe_allow_html=True)
+def main():
+    # -----------------------------------------------------------------------
+    # Header Area
+    # -----------------------------------------------------------------------
+    col_title, col_status = st.columns([5, 1])
+    with col_title:
+        st.markdown("<h1 style='font-size: 3rem; margin-top: -1rem;'>🌿 AgriVision AI</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='font-size: 1.1rem; color: #a1a1aa;'>The world's most advanced crop intelligence platform.</p>", unsafe_allow_html=True)
+    
+    with col_status:
+        is_online = check_backend()
+        st.write("") # spacing
+        st.write("")
+        if is_online:
+            st.markdown("<div style='text-align: right; color: #a1a1aa; font-weight: 500;'><span class='status-indicator'></span>System Online</div>", unsafe_allow_html=True)
+        else:
+            st.markdown("<div style='text-align: right; color: #a1a1aa; font-weight: 500;'><span class='status-indicator status-offline'></span>System Offline</div>", unsafe_allow_html=True)
 
-    col_upload, col_result = st.columns([1, 2], gap="large")
+    st.write("")
+    
+    # -----------------------------------------------------------------------
+    # Native Tabs (Powered by Ultimate CSS)
+    # -----------------------------------------------------------------------
+    tab_analyse, tab_chatbot, tab_simulation, tab_dss, tab_gan, tab_about = st.tabs([
+        "🔬 Analyse", 
+        "🤖 Chatbot", 
+        "📊 Simulation", 
+        "🧠 DSS", 
+        "🎨 GAN Data", 
+        "📖 About"
+    ])
 
-    with col_upload:
-        st.markdown('<div class="card-title"><span class="card-title-icon">🖼️</span>Leaf Image</div>', unsafe_allow_html=True)
-        uploaded = st.file_uploader("", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
-
-        if uploaded:
-            st.image(Image.open(uploaded), use_container_width=True)
-            st.markdown("<br>", unsafe_allow_html=True)
-
-            if not backend_online:
-                st.warning("Backend is offline. Start it with:\n```\nuvicorn api.main:app --port 8000\n```")
+    # -----------------------------------------------------------------------
+    # 1. Analyse Tab
+    # -----------------------------------------------------------------------
+    with tab_analyse:
+        st.write("")
+        col1, col_gap, col2 = st.columns([1, 0.1, 1.2])
+        
+        with col1:
+            st.markdown("<h3>Upload Sample</h3>", unsafe_allow_html=True)
+            st.markdown("<p>Upload a high-resolution image of a leaf to begin the analysis pipeline.</p>", unsafe_allow_html=True)
+            
+            uploaded = st.file_uploader("", type=["jpg", "png", "jpeg"])
+            
+            if uploaded:
+                st.image(Image.open(uploaded), use_container_width=True)
+                if not is_online:
+                    st.error("Cannot run analysis while backend is offline.")
+                else:
+                    st.write("")
+                    if st.button("Initialize Deep Scan", type="primary", use_container_width=True):
+                        with st.spinner("Executing neural inference and spread modelling..."):
+                            res = run_analysis(uploaded)
+                            if res:
+                                st.session_state.analysis_result = res
+                                st.success("Scan Complete.")
+            
+        with col2:
+            res = st.session_state.analysis_result
+            if not res:
+                st.markdown("""
+                <div style="background: rgba(24, 24, 27, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 40px; text-align: center; margin-top: 2rem;">
+                    <h2 style="color: #52525b; font-size: 3rem; margin-bottom: 1rem;">🔍</h2>
+                    <h3 style="color: #a1a1aa;">Awaiting Telemetry</h3>
+                    <p style="color: #71717a;">Upload an image on the left to initiate the diagnostic pipeline.</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
             else:
-                if st.button("🚀 Run Full Analysis", use_container_width=True):
-                    with st.spinner("Running AI pipeline..."):
-                        result = run_full_analysis(uploaded)
-                    if result:
-                        st.session_state.analysis_result = result
-                        st.success("Analysis complete!")
+                name = res["disease_name"].replace("___", " — ").replace("_", " ")
+                conf = res["vision_detection"]["confidence"]
+                
+                if res.get("is_healthy"):
+                    st.markdown(f"""
+                    <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 32px;">
+                        <h2 style="color: #10b981; margin: 0; font-size: 2rem;">✅ Healthy Crop Detected</h2>
+                        <p style="color: #a1a1aa; font-size: 1.1rem; margin-top: 12px;">{name}</p>
+                        <p style="color: #71717a; margin-top: 8px;">No pathogens or stress markers identified. Crop is in optimal condition.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                else:
+                    urg = res["urgency_level"]
+                    u_color = "#f43f5e" if urg == "HIGH" else "#f59e0b" if urg == "MEDIUM" else "#10b981"
+                    
+                    st.markdown(f"""
+                    <div style="background: linear-gradient(135deg, rgba(24, 24, 27, 0.8) 0%, rgba(24, 24, 27, 0.2) 100%); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 32px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: {u_color}; box-shadow: 0 0 20px {u_color};"></div>
+                        <h4 style="color: {u_color}; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin: 0 0 8px 0;">Urgency: {urg}</h4>
+                        <h2 style="color: #f8fafc; margin: 0 0 16px 0; font-size: 2.2rem; line-height: 1.2;">{name}</h2>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    st.write("")
+                    st.markdown("<p style='font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #a1a1aa;'>Neural Network Confidence</p>", unsafe_allow_html=True)
+                    st.progress(int(conf), text=f"Match Probability: {conf}%")
+                    
+                    st.write("")
+                    rec = res["recommendation"]
+                    
+                    st.markdown(f"""
+                    <div style="margin-top: 1rem; background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 20px; padding: 32px;">
+                        <h4 style="color: #10b981; margin: 0 0 16px 0; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem;">💡 Optimized Treatment Plan</h4>
+                        <h3 style="color: #f8fafc; margin: 0 0 12px 0;">{rec['best_strategy']}</h3>
+                        <p style="color: #a1a1aa; line-height: 1.6;">{rec['action_summary']}</p>
+                        <div style="margin-top: 16px; display: inline-block; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; padding: 6px 16px; border-radius: 100px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;">
+                            ↓ Saves {rec['saving_vs_baseline']}% crop loss vs baseline
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                    st.write("")
+                    with st.expander("View Deep RAG Protocol Details"):
+                        st.markdown(res["rag_treatment_protocol"]["retrieved_context"])
+
+    # -----------------------------------------------------------------------
+    # 2. Chatbot Tab
+    # -----------------------------------------------------------------------
+    with tab_chatbot:
+        st.write("")
+        st.markdown("<h2>AgriBot Neural Assistant</h2>", unsafe_allow_html=True)
+        st.markdown("<p>Ask contextual follow-up questions powered by Llama 3 and our localized ChromaDB vector store.</p>", unsafe_allow_html=True)
+        
+        if not is_online:
+            st.error("Cannot initialize LLM connection while backend is offline.")
         else:
-            st.markdown("""
-            <div style="text-align:center;padding:40px 20px;color:#8b949e;">
-                <div style="font-size:36px;margin-bottom:12px;">🍃</div>
-                <div style="font-size:13px;">Drop a JPG or PNG of a crop leaf</div>
-                <div style="font-size:11px;margin-top:6px;color:#484f58;">Supports tomato, corn, potato, apple</div>
-            </div>
-            """, unsafe_allow_html=True)
+            for message in st.session_state.chat_history:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
 
-    with col_result:
-        result = st.session_state.analysis_result
-        if result is None:
-            st.markdown("""
-            <div class="pipeline-grid">
-                <div class="pipeline-step">
-                    <div class="pipeline-icon">🖼️</div>
-                    <div class="pipeline-label">Upload</div>
-                    <div class="pipeline-desc">Photo of a crop leaf from the field</div>
-                </div>
-                <div class="pipeline-step">
-                    <div class="pipeline-icon">🔬</div>
-                    <div class="pipeline-label">Detect</div>
-                    <div class="pipeline-desc">ResNet-50 identifies the disease</div>
-                </div>
-                <div class="pipeline-step">
-                    <div class="pipeline-icon">📚</div>
-                    <div class="pipeline-label">Advise</div>
-                    <div class="pipeline-desc">RAG retrieves treatment protocol</div>
-                </div>
-                <div class="pipeline-step">
-                    <div class="pipeline-icon">📊</div>
-                    <div class="pipeline-label">Decide</div>
-                    <div class="pipeline-desc">Simulation + DSS ranks interventions</div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-            return
+            if prompt := st.chat_input("Query the agricultural knowledge base..."):
+                st.chat_message("user").markdown(prompt)
+                st.session_state.chat_history.append({"role": "user", "content": prompt})
+                
+                with st.spinner("Synthesizing response..."):
+                    try:
+                        r = requests.post(f"{API_BASE_URL}/chat/", json={"question": prompt}, timeout=30)
+                        ans = r.json().get("answer", "Error") if r.status_code == 200 else f"Error: {r.status_code}"
+                    except:
+                        ans = "Connection error. Model timeout."
+                
+                with st.chat_message("assistant"):
+                    st.markdown(ans)
+                st.session_state.chat_history.append({"role": "assistant", "content": ans})
+                
+            st.write("")
+            if st.button("Purge Chat Memory"):
+                st.session_state.chat_history = []
+                st.rerun()
 
-        is_healthy = result.get("is_healthy", False)
-        vision = result.get("vision_detection", {})
-        rag = result.get("rag_treatment_protocol", {})
-        recommendation = result.get("recommendation", {})
-        urgency = result.get("urgency_level", "LOW")
-
-        # ── Disease / healthy result ──
-        disease_raw = vision.get("predicted_class", "Unknown")
-        disease_display = disease_raw.replace("___", " — ").replace("_", " ").title()
-        confidence = vision.get("confidence", 0)
-
-        if is_healthy:
-            st.markdown(f"""
-            <div class="healthy-banner">
-                <div class="healthy-icon">✅</div>
-                <div class="healthy-title">{disease_display}</div>
-                <div class="healthy-text">No disease detected. Your crop appears healthy.</div>
-            </div>
-            """, unsafe_allow_html=True)
+    # -----------------------------------------------------------------------
+    # 3. Simulation Tab
+    # -----------------------------------------------------------------------
+    with tab_simulation:
+        st.write("")
+        st.markdown("<h2>SIR Infection Spread Dynamics</h2>", unsafe_allow_html=True)
+        st.markdown("<p>Predictive modelling of crop loss trajectories across your farm grid over time.</p>", unsafe_allow_html=True)
+        st.write("")
+        
+        res = st.session_state.analysis_result
+        if not res:
+            st.info("Awaiting telemetry. Upload an image in the Analyse tab to generate models.")
+        elif res.get("is_healthy"):
+            st.success("Target is healthy. Simulation matrices are dormant.")
         else:
-            urgency_lower = urgency.lower()
-            badge_cls = f"badge-{urgency_lower}"
-            bar_colour = "#f87171" if urgency == "HIGH" else "#fbbf24" if urgency == "MEDIUM" else "#4ade80"
-
-            st.markdown(f"""
-            <div class="card">
-                <div class="card-title"><span class="card-title-icon">🦠</span>Detection Result</div>
-                <div class="disease-name">{disease_display}</div>
-                <div class="confidence-bar-bg">
-                    <div class="confidence-bar-fill" style="width:{confidence}%;background:{bar_colour};"></div>
-                </div>
-                <div class="confidence-meta">Confidence: {confidence:.1f}% · {vision.get('confidence_label', '')} · <span class="badge {badge_cls}">{urgency} urgency</span></div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        # ── Treatment protocol ──
-        with st.expander("📋 Expert Treatment Protocol", expanded=True):
-            st.markdown(rag.get("retrieved_context", "No context available."))
-
-        # ── Recommendation ──
-        if not is_healthy:
-            best = recommendation.get("best_strategy", "—")
-            summary = recommendation.get("action_summary", "")
-            loss = recommendation.get("projected_loss")
-            loss_text = f"Projected crop loss: {loss:.1f}%" if loss is not None else ""
-
-            st.markdown(f"""
-            <div class="rec-box">
-                <div class="rec-strategy">✅ {best}</div>
-                <div class="rec-summary">{summary}</div>
-                <div class="rec-meta">{loss_text}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        with st.expander("🔍 Raw JSON response"):
-            st.json(result)
-
-
-# ---------------------------------------------------------------------------
-# Tab: Chatbot
-# ---------------------------------------------------------------------------
-def render_chatbot_tab(backend_online: bool) -> None:
-    st.markdown("""
-    <div class="page-header">
-        <p class="page-title">AgriBot — Chatbot Q&A</p>
-        <p class="page-subtitle">Ask questions about crop diseases, treatments, and prevention strategies. Powered by RAG + LLM.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    if not backend_online:
-        st.warning("Backend must be running to use the chatbot.")
-        return
-
-    for msg in st.session_state.chat_history:
-        role = msg["role"]
-        content = msg["content"]
-        if role == "user":
-            st.markdown(f"""
-            <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
-                <div style="background:#21262d;border-radius:10px 10px 2px 10px;padding:10px 16px;
-                            max-width:70%;font-size:14px;color:#e6edf3;">{content}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        else:
-            st.markdown(f"""
-            <div style="display:flex;justify-content:flex-start;margin-bottom:12px;gap:10px;">
-                <div style="font-size:22px;margin-top:2px;">🌿</div>
-                <div style="background:#161b22;border:1px solid #21262d;border-radius:2px 10px 10px 10px;
-                            padding:10px 16px;max-width:75%;font-size:14px;color:#e6edf3;line-height:1.6;">{content}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-    user_input = st.chat_input("Ask about a crop disease, treatment, or prevention strategy...")
-    if user_input:
-        st.session_state.chat_history.append({"role": "user", "content": user_input})
-        try:
-            response = requests.post(
-                f"{API_BASE_URL}/chat/",
-                json={"question": user_input,
-                      "history": st.session_state.chat_history[:-1]},
-                timeout=30,
+            sim = res["simulation_summary"]
+            
+            m1, m2, m3 = st.columns(3)
+            m1.metric("Farm Grid Resolution", f"{sim['grid_size'][0]}x{sim['grid_size'][1]}", "Cells")
+            m2.metric("Simulation Horizon", f"{sim['days_simulated']} Days", "+1.0x Speed")
+            m3.metric("Projected Savings", f"{sim['crop_loss_saving']}%", "vs Control")
+            
+            st.write("")
+            st.markdown("<div style='background: rgba(24, 24, 27, 0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 24px;'>", unsafe_allow_html=True)
+            fig = go.Figure()
+            colors = ["#f43f5e", "#3b82f6", "#10b981", "#f59e0b"]
+            
+            for i, scen in enumerate(res["scenarios"]):
+                dc = scen["daily_counts"]
+                if not dc: continue
+                fig.add_trace(go.Scatter(
+                    x=[d["day"] for d in dc], 
+                    y=[d["infected"] for d in dc],
+                    name=scen["intervention_name"],
+                    line=dict(color=colors[i%len(colors)], width=4),
+                ))
+                
+            fig.update_layout(
+                template="plotly_dark",
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                xaxis_title="Time (Days)",
+                yaxis_title="Active Infections",
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                margin=dict(l=0, r=0, t=30, b=0)
             )
-            if response.status_code == 200:
-                answer = response.json().get("answer", "No response.")
-            else:
-                answer = f"Sorry, I couldn't process that (error {response.status_code})."
-        except Exception:
-            answer = (
-                "⚠️ Chat endpoint not available. "
-                "Make sure `/chat/` is added to `api/main.py` and the backend is running."
+            st.plotly_chart(fig, use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
+
+    # -----------------------------------------------------------------------
+    # 4. DSS Tab
+    # -----------------------------------------------------------------------
+    with tab_dss:
+        st.write("")
+        st.markdown("<h2>Multi-Criteria Decision Matrix</h2>", unsafe_allow_html=True)
+        st.markdown("<p>Algorithmic ranking of intervention strategies maximizing yield while minimizing resource expenditure.</p>", unsafe_allow_html=True)
+        st.write("")
+        
+        res = st.session_state.analysis_result
+        if not res:
+            st.info("Awaiting telemetry. Upload an image in the Analyse tab to generate models.")
+        elif res.get("is_healthy"):
+            st.success("Target is healthy. Decision matrix is dormant.")
+        else:
+            df = pd.DataFrame([{
+                "Rank": s['rank'],
+                "Strategy": s["intervention_name"],
+                "Projected Loss": f"{s['crop_loss_percent']}%",
+                "Heuristic Score": s['final_score']
+            } for s in res["ranked_interventions"]])
+            
+            st.dataframe(
+                df, 
+                use_container_width=True, 
+                hide_index=True,
+                column_config={
+                    "Rank": st.column_config.NumberColumn(format="#%d"),
+                    "Heuristic Score": st.column_config.NumberColumn(format="%.4f")
+                }
             )
-        st.session_state.chat_history.append({"role": "assistant", "content": answer})
-        st.rerun()
 
-    if st.session_state.chat_history:
-        if st.button("🗑️ Clear conversation"):
-            st.session_state.chat_history = []
-            st.rerun()
-
-
-# ---------------------------------------------------------------------------
-# Tab: Simulation
-# ---------------------------------------------------------------------------
-def render_simulation_tab() -> None:
-    st.markdown("""
-    <div class="page-header">
-        <p class="page-title">Spread Simulation</p>
-        <p class="page-subtitle">SIR model simulates how the detected disease spreads across a 20×20 farm grid under different intervention strategies.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    result = st.session_state.analysis_result
-    if result is None or result.get("is_healthy"):
-        st.info("Run an analysis first from the **Analyse** tab to see simulation results.")
-        return
-
-    sim_summary = result.get("simulation_summary", {})
-    scenarios = result.get("scenarios", [])
-
-    if sim_summary:
-        grid = sim_summary.get("grid_size", [20, 20])
-        days = sim_summary.get("days_simulated", 30)
-        saving = sim_summary.get("crop_loss_saving")
-        baseline = sim_summary.get("baseline_crop_loss")
-        best_loss = sim_summary.get("best_crop_loss")
-
-        st.markdown(f"""
-        <div class="metrics-row">
-            <div class="metric-card">
-                <div class="metric-label">Grid Size</div>
-                <div class="metric-value">{grid[0]}×{grid[1]}</div>
-                <div class="metric-delta">{grid[0] * grid[1]} total cells</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Days Simulated</div>
-                <div class="metric-value">{days}</div>
-                <div class="metric-delta">Daily spread tracking</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Crop Loss Saving</div>
-                <div class="metric-value" style="color:#4ade80;">{saving:.1f}%</div>
-                <div class="metric-delta">vs. no intervention ({baseline:.1f}% → {best_loss:.1f}%)</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    if scenarios:
-        fig = go.Figure()
-        palette = ["#f87171", "#60a5fa", "#4ade80", "#fbbf24"]
-
-        for idx, scenario in enumerate(scenarios):
-            daily = scenario.get("daily_counts", [])
-            if not daily:
-                continue
-            days_x = [d["day"] for d in daily]
-            infected_y = [d["infected"] for d in daily]
-            colour = palette[idx % len(palette)]
-            fig.add_trace(go.Scatter(
-                x=days_x, y=infected_y,
-                mode="lines",
-                name=scenario["intervention_name"],
-                line=dict(color=colour, width=2.5),
-                fill="tozeroy",
-                fillcolor=colour.replace(")", ",0.05)").replace("rgb", "rgba") if "rgb" in colour else colour + "0d",
-            ))
-
-        fig.update_layout(
-            title=dict(text="Infected Cells Over Time by Strategy", font=dict(size=14, color="#8b949e")),
-            xaxis=dict(title="Day", color="#8b949e", gridcolor="#21262d", zeroline=False),
-            yaxis=dict(title="Infected Cells", color="#8b949e", gridcolor="#21262d", zeroline=False),
-            legend=dict(font=dict(color="#8b949e"), bgcolor="rgba(0,0,0,0)"),
-            paper_bgcolor="#161b22",
-            plot_bgcolor="#161b22",
-            height=380,
-            margin=dict(l=10, r=10, t=40, b=10),
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-
-# ---------------------------------------------------------------------------
-# Tab: Decision Support
-# ---------------------------------------------------------------------------
-def render_dss_tab() -> None:
-    st.markdown("""
-    <div class="page-header">
-        <p class="page-title">Decision Support System</p>
-        <p class="page-subtitle">Ranks intervention strategies by combining simulation results, model confidence, and RAG relevance into a single actionable score.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    result = st.session_state.analysis_result
-    if result is None or result.get("is_healthy"):
-        st.info("Run an analysis first from the **Analyse** tab to see DSS results.")
-        return
-
-    urgency = result.get("urgency_level", "LOW")
-    ranked = result.get("ranked_interventions", [])
-    recommendation = result.get("recommendation", {})
-
-    urgency_cls = f"urgency-{urgency.lower()}"
-    urgency_icon = "🔴" if urgency == "HIGH" else "🟡" if urgency == "MEDIUM" else "🟢"
-    st.markdown(f"""
-    <div class="urgency-banner {urgency_cls}">
-        {urgency_icon} Urgency Level: <strong>{urgency}</strong>
-    </div>
-    """, unsafe_allow_html=True)
-
-    if ranked:
-        df = pd.DataFrame([{
-            "Rank": f"#{r['rank']}",
-            "Strategy": r["intervention_name"],
-            "Crop Loss": f"{r['crop_loss_percent']:.1f}%",
-            "Score": f"{r['final_score']:.3f}",
-        } for r in ranked])
-        st.dataframe(df, use_container_width=True, hide_index=True)
-
-    best = recommendation.get("best_strategy", "—")
-    summary = recommendation.get("action_summary", "")
-    loss = recommendation.get("projected_loss")
-    saving = recommendation.get("saving_vs_baseline")
-
-    loss_text = f"Projected crop loss: {loss:.1f}%" if loss is not None else ""
-    saving_text = f" · Saving vs no action: {saving:.1f}%" if saving is not None else ""
-
-    st.markdown(f"""
-    <div class="rec-box">
-        <div class="rec-strategy">✅ {best}</div>
-        <div class="rec-summary">{summary}</div>
-        <div class="rec-meta">{loss_text}{saving_text}</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# ---------------------------------------------------------------------------
-# Tab: GAN Synthesis
-# ---------------------------------------------------------------------------
-def render_gan_tab() -> None:
-    st.markdown("""
-    <div class="page-header">
-        <p class="page-title">GAN Synthesis</p>
-        <p class="page-subtitle">A Generative Adversarial Network trained on PlantVillage data produces synthetic leaf images to augment the training dataset.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="gan-arch">
-        <div class="card-title"><span class="card-title-icon">🏗️</span>Architecture</div>
-        <div class="gan-flow">
-            <div class="gan-box">
-                <div class="gan-box-title">Input</div>
-                <div class="gan-box-name">Noise Vector z</div>
-            </div>
-            <div class="gan-arrow">→</div>
-            <div class="gan-box gan-highlight">
-                <div class="gan-box-title">Generator G</div>
-                <div class="gan-box-name">ConvTranspose2D</div>
-            </div>
-            <div class="gan-arrow">→</div>
-            <div class="gan-box">
-                <div class="gan-box-title">Output</div>
-                <div class="gan-box-name">Synthetic Image</div>
-            </div>
-            <div class="gan-arrow">→</div>
-            <div class="gan-box gan-highlight">
-                <div class="gan-box-title">Discriminator D</div>
-                <div class="gan-box-name">Conv2D Classifier</div>
-            </div>
-            <div class="gan-arrow">→</div>
-            <div class="gan-box">
-                <div class="gan-box-title">Output</div>
-                <div class="gan-box-name">Real / Fake</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    col1, col2 = st.columns(2, gap="large")
-
-    with col1:
+    # -----------------------------------------------------------------------
+    # 5. GAN Tab
+    # -----------------------------------------------------------------------
+    with tab_gan:
+        st.write("")
+        st.markdown("<h2>Synthetic Data Generation (DCGAN)</h2>", unsafe_allow_html=True)
+        st.markdown("<p>How we achieve zero-shot resilience against rare pathogens.</p>", unsafe_allow_html=True)
+        st.write("")
+        
         st.markdown("""
-        <div class="card">
-            <div class="card-title"><span>🎯</span>Purpose</div>
-            <p style="font-size:13px;color:#8b949e;line-height:1.7;margin:0;">
-            The training dataset has <strong style="color:#e6edf3;">class imbalance</strong> —
-            some diseases have only 200–400 images while others have 2,000+.
-            The GAN addresses this by generating realistic synthetic leaf images
-            for underrepresented classes, improving the ResNet-50 model's
-            accuracy on rare diseases.
+        <div style="background: rgba(24, 24, 27, 0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 32px;">
+            <h3 style="color: #f8fafc; margin-top: 0;">Overcoming Dataset Imbalance</h3>
+            <p style="color: #a1a1aa; font-size: 1.1rem; line-height: 1.7;">
+                In the real world, massive agricultural datasets are heavily skewed towards common diseases. Rare pathogens lack sufficient photographic evidence to train robust neural networks.
+            </p>
+            <p style="color: #a1a1aa; font-size: 1.1rem; line-height: 1.7;">
+                To solve this, AgriVision employs a <strong>Generative Adversarial Network (GAN)</strong>. By pitting a Generator against a Discriminator, the AI learns the underlying manifold of leaf topology and pathogen presentation. It then hallucinates photorealistic synthetic samples of rare diseases, allowing the ResNet-50 classifier to achieve high accuracy even on edge-cases never seen on your farm.
             </p>
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("""
-        <div class="card">
-            <div class="card-title"><span>📁</span>Files</div>
-            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#8b949e;line-height:2;">
-                src/Gan/generator.py<br>
-                src/Gan/discriminator.py<br>
-                src/Gan/trainer.py<br>
-                src/Gan/generate.py
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown("""
-        <div class="card">
-            <div class="card-title"><span>⚙️</span>Training Details</div>
-            <table style="width:100%;font-size:13px;border-collapse:collapse;">
-                <tr style="border-bottom:1px solid #21262d;">
-                    <td style="padding:8px 0;color:#8b949e;">Architecture</td>
-                    <td style="padding:8px 0;color:#e6edf3;text-align:right;">DCGAN</td>
-                </tr>
-                <tr style="border-bottom:1px solid #21262d;">
-                    <td style="padding:8px 0;color:#8b949e;">Input noise dim</td>
-                    <td style="padding:8px 0;color:#e6edf3;text-align:right;">100</td>
-                </tr>
-                <tr style="border-bottom:1px solid #21262d;">
-                    <td style="padding:8px 0;color:#8b949e;">Output resolution</td>
-                    <td style="padding:8px 0;color:#e6edf3;text-align:right;">64 × 64 px</td>
-                </tr>
-                <tr style="border-bottom:1px solid #21262d;">
-                    <td style="padding:8px 0;color:#8b949e;">Optimizer</td>
-                    <td style="padding:8px 0;color:#e6edf3;text-align:right;">Adam (β₁=0.5)</td>
-                </tr>
-                <tr>
-                    <td style="padding:8px 0;color:#8b949e;">Loss function</td>
-                    <td style="padding:8px 0;color:#e6edf3;text-align:right;">Binary Cross-Entropy</td>
-                </tr>
-            </table>
-        </div>
-        """, unsafe_allow_html=True)
-
-        st.markdown("""
-        <div class="card">
-            <div class="card-title"><span>🔄</span>Role in Pipeline</div>
-            <p style="font-size:13px;color:#8b949e;line-height:1.7;margin:0;">
-            After training, <code style="background:#21262d;padding:2px 6px;border-radius:4px;">generate.py</code>
-            produces a batch of synthetic images saved to <code style="background:#21262d;padding:2px 6px;border-radius:4px;">data/synthetic/</code>.
-            These are merged with the real PlantVillage + PlantDoc hybrid dataset
-            before the next ResNet-50 training cycle.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div style="background:#1c1408;border:1px solid #78350f;border-radius:8px;padding:14px 18px;
-                font-size:13px;color:#fcd34d;margin-top:8px;">
-        ⚠️ GAN training requires GPU and the full dataset (~30k images). The trained checkpoint
-        is not included in this repository due to file size. Run <code>python src/Gan/trainer.py</code>
-        with the processed dataset to produce a checkpoint, then use <code>generate.py</code> to sample images.
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# ---------------------------------------------------------------------------
-# Tab: About
-# ---------------------------------------------------------------------------
-def render_about_tab() -> None:
-    st.markdown("""
-    <div class="page-header">
-        <p class="page-title">About This System</p>
-        <p class="page-subtitle">A full-stack AI pipeline for agricultural pest detection and decision support.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("""
-    <div class="lab-grid">
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">Chatbot Q&A</div>
-                <div class="lab-desc">Stateful farmer Q&A chatbot grounded in the RAG knowledge base using Groq LLM.</div>
-            </div>
-        </div>
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">Prompt Engine</div>
-                <div class="lab-desc">Centralised prompt template library. All LLM prompts defined once and reused across modules.</div>
-            </div>
-        </div>
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">Data Pipeline</div>
-                <div class="lab-desc">PlantVillage + PlantDoc hybrid dataset — 21 classes, 80/10/10 train/val/test split.</div>
-            </div>
-        </div>
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">RAG Knowledge</div>
-                <div class="lab-desc">ChromaDB vector store with HuggingFace embeddings. Retrieves treatment protocols by cosine similarity.</div>
-            </div>
-        </div>
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">Vision Model</div>
-                <div class="lab-desc">ResNet-50 fine-tuned on the hybrid dataset. Classifies 21 crop disease categories with softmax confidence.</div>
-            </div>
-        </div>
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">GAN Synthesis</div>
-                <div class="lab-desc">DCGAN generates synthetic leaf images to augment underrepresented disease classes in training.</div>
-            </div>
-        </div>
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">Simulation</div>
-                <div class="lab-desc">SIR spread model on a 20×20 farm grid. Compares disease progression under three intervention strategies.</div>
-            </div>
-        </div>
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">Dashboard</div>
-                <div class="lab-desc">This Streamlit interface. Integrates all module outputs into one end-to-end user workflow.</div>
-            </div>
-        </div>
-        <div class="lab-card">
-            <div class="lab-dot"></div>
-            <div>
-                <div class="lab-name">Decision Support</div>
-                <div class="lab-desc">Scores and ranks interventions using simulation results, model confidence, and RAG relevance.</div>
-            </div>
-        </div>
-    </div>
-
-    <br>
-    <div class="card" style="margin-top:16px;">
-        <div class="card-title"><span>🛠️</span>Technology Stack</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;font-size:13px;">
-            <div>
-                <div style="color:#8b949e;margin-bottom:8px;font-weight:600;">ML / Vision</div>
-                <div style="color:#e6edf3;line-height:2;">PyTorch · ResNet-50 · torchvision · DCGAN</div>
-            </div>
-            <div>
-                <div style="color:#8b949e;margin-bottom:8px;font-weight:600;">NLP / RAG</div>
-                <div style="color:#e6edf3;line-height:2;">LangChain · ChromaDB · HuggingFace · Groq LLM</div>
-            </div>
-            <div>
-                <div style="color:#8b949e;margin-bottom:8px;font-weight:600;">Backend / UI</div>
-                <div style="color:#e6edf3;line-height:2;">FastAPI · Streamlit · Plotly · Pandas</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-
-# ---------------------------------------------------------------------------
-# Tab routing — read from URL query params
-# ---------------------------------------------------------------------------
-def get_active_tab() -> str:
-    params = st.query_params
-    tab = params.get("tab", "analyse")
-    valid_tabs = {k for _, _, k in TAB_NAMES}
-    return tab if tab in valid_tabs else "analyse"
-
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
-def main() -> None:
-    backend_online = check_backend()
-    active = get_active_tab()
-    st.session_state.active_tab = active
-
-    render_navbar(backend_online)
-
-    if active == "analyse":
-        render_analyse_tab(backend_online)
-    elif active == "chatbot":
-        render_chatbot_tab(backend_online)
-    elif active == "simulation":
-        render_simulation_tab()
-    elif active == "dss":
-        render_dss_tab()
-    elif active == "gan":
-        render_gan_tab()
-    elif active == "about":
-        render_about_tab()
-
+    # -----------------------------------------------------------------------
+    # 6. About Tab
+    # -----------------------------------------------------------------------
+    with tab_about:
+        st.write("")
+        st.markdown("<h2>System Architecture</h2>", unsafe_allow_html=True)
+        if not is_online:
+            st.warning("API offline. Cannot fetch component status.")
+        else:
+            try:
+                info = requests.get(f"{API_BASE_URL}/system_info/", timeout=2).json()
+                st.json(info)
+            except:
+                st.error("Failed to fetch system info.")
 
 if __name__ == "__main__":
     main()

@@ -1,17 +1,35 @@
 {
-  "src/lab1_chatbot": "Domain Q&A chatbot implementation",
-  "src/lab2_prompts": "Prompt engineering templates",
-  "src/lab3_data": "Data collection and preprocessing",
-  "src/lab4_rag": "Retrieval Augmented Generation system",
-  "src/lab5_model": "Predictive ML model",
-  "src/lab6_gan": "Synthetic data generation",
-  "src/lab7_simulation": "Scenario simulation",
-  "src/lab8_dashboard": "Visualization dashboard",
-  "src/lab9_dss": "Decision support system",
-  "data/raw": "Original datasets",
-  "data/processed": "Preprocessed data",
-  "data/synthetic": "AI-generated data",
-  "models": "Trained model files",
-  "docs": "Project documentation",
-  "tests": "Unit and integration tests"
+  "project_name": "AgriVision-RAG",
+  "directories": {
+    "api": ["main.py"],
+    "app": ["frontend.py"],
+    "assets": [],
+    "data": ["raw", "processed", "knowledge_base", "synthetic"],
+    "models": ["resnet50_hybrid_best.pth", "class_mapping.json"],
+    "notebooks": ["GAN_and_Hybrid_Training_.ipynb"],
+    "src": {
+      "lab1_chatbot": ["chatbot.py", "__init__.py"],
+      "lab2_prompts": ["prompt_templates.py", "__init__.py"],
+      "lab3_data": ["collector.py", "preprocessor.py", "__init__.py"],
+      "lab4_rag": ["generator.py", "vector_store.py", "__init__.py"],
+      "lab5_model": ["inference.py", "__init__.py"],
+      "lab6_gan": ["discriminator.py", "generate.py", "generator.py", "trainer.py", "__init__.py"],
+      "lab7_simulation": ["farm_grid.py", "interventions.py", "simulator.py", "spread_model.py", "__init__.py"],
+      "lab8_dashboard": ["__init__.py"],
+      "lab9_dss": ["dss_engine.py", "report.py", "scoring.py", "__init__.py"],
+      "main.py": null
+    },
+    "vector_db": []
+  },
+  "root_files": [
+    ".env",
+    "ARCHITECTURE.md",
+    "CLAUDE.md",
+    "CONTEXT.md",
+    "Dockerfile",
+    "PROGRESS.md",
+    "README.md",
+    "requirements.txt",
+    "RULES.md"
+  ]
 }

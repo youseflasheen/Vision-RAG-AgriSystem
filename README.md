@@ -171,12 +171,22 @@ streamlit run app/frontend.py
 ```
 ├── api/                  # FastAPI application & routes
 ├── app/                  # Streamlit frontend UI
-├── data/                 # Raw and processed datasets (Ignored in Git)
-├── models/               # PyTorch model weights (.pth) (Ignored in Git)
-├── vector_db/            # ChromaDB local persistence (Ignored in Git)
-├── knowledge_base/       # JSON files with expert agricultural data
+├── data/                 # Raw, processed, and synthetic datasets
+├── models/               # PyTorch model weights (.pth)
+├── notebooks/            # Jupyter notebooks for training (Colab)
+├── src/                  # Core modules
+│   ├── lab1_chatbot/     # Groq LLM Chatbot
+│   ├── lab2_prompts/     # Centralized prompt templates
+│   ├── lab3_data/        # Data collection & preprocessing
+│   ├── lab4_rag/         # ChromaDB & Document Retrieval
+│   ├── lab5_model/       # ResNet-50 Inference
+│   ├── lab6_gan/         # DCGAN Synthetic Generation
+│   ├── lab7_simulation/  # SIR Spread Simulation
+│   ├── lab8_dashboard/   # Dashboard Utilities
+│   ├── lab9_dss/         # Decision Support & Scoring
+│   └── main.py           # Application entry point
+├── vector_db/            # ChromaDB local persistence
 ├── Dockerfile            # Container configuration
 ├── requirements.txt      # Python dependencies
 └── README.md
-
 ```

@@ -1,10 +1,10 @@
 """FastAPI backend — main API entry point.
 
-Exposes two endpoints:
-    GET  /              — health check
-    POST /diagnose/     — vision + RAG only — original endpoint
-    POST /full_analysis/ — full pipeline: vision + RAG + simulation + DSS
-                          (Labs 5, 4, 1, 2, 7, 9 — returns complete DSS report)
+Exposes endpoints:
+    GET  /               — health check
+    POST /diagnose/      — vision + RAG only (original endpoint)
+    POST /full_analysis/  — full pipeline: vision + RAG + simulation + DSS
+    POST /chat/          — chatbot Q&A
 
 Run with:
     uvicorn api.main:app --reload --port 8000
@@ -14,30 +14,44 @@ import os
 import sys
 import shutil
 from typing import Any
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 # ---------------------------------------------------------------------------
-# Path setup — ensures all src/ lab modules are importable
+# Path setup — ensures src/ package is importable
 # ---------------------------------------------------------------------------
 _PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if _PROJECT_ROOT not in sys.path:
     sys.path.insert(0, _PROJECT_ROOT)
 
-# Simulation modules need their own directory on sys.path (they use
-# relative imports like `from farm_grid import FarmGrid`)
-_SIMULATION_PATH = os.path.join(_PROJECT_ROOT, "src", "simulation")
-if _SIMULATION_PATH not in sys.path:
-    sys.path.insert(0, _SIMULATION_PATH)
+from src.lab5_model.inference import AgriVisionRAG
+from src.lab4_rag.generator import RAGGenerator
+from src.lab7_simulation.simulator import run_simulation
+from src.lab9_dss.dss_engine import run_dss
+from src.lab1_chatbot.chatbot import AgriculturalChatbot
 
-_DSS_PATH = os.path.join(_PROJECT_ROOT, "src", "DSS")
-if _DSS_PATH not in sys.path:
-    sys.path.insert(0, _DSS_PATH)
+# ---------------------------------------------------------------------------
+# Globals — initialised once at startup to avoid reloading models per request
+# ---------------------------------------------------------------------------
+_vision_rag_pipeline: AgriVisionRAG = None
+_rag_generator: RAGGenerator = None
+_chatbot: AgriculturalChatbot = None
 
-from src.vision.inference import AgriVisionRAG
-from src.rag.generator import RAGGenerator
-from simulator import run_simulation
-from dss_engine import run_dss
+
+@asynccontextmanager
+async def lifespan(application: FastAPI):
+    """Load all models and vector DB into memory at server start."""
+    global _vision_rag_pipeline, _rag_generator, _chatbot
+    print("[API] Loading vision model and RAG pipeline...")
+    _vision_rag_pipeline = AgriVisionRAG()
+    _rag_generator = RAGGenerator()
+    _chatbot = AgriculturalChatbot()
+    print("[API] Ready.")
+    yield
+    print("[API] Shutting down.")
+
 
 # ---------------------------------------------------------------------------
 # App
@@ -46,21 +60,17 @@ app = FastAPI(
     title="AgriVision AI — Pest Detection API",
     description="End-to-end pest detection, RAG advice, simulation and DSS.",
     version="2.0.0",
+    lifespan=lifespan,
 )
 
-# Globals — initialised once at startup to avoid reloading models per request
-_vision_rag_pipeline: AgriVisionRAG = None
-_rag_generator: RAGGenerator = None
-
-
-@app.on_event("startup")
-async def startup_event() -> None:
-    """Load all models and vector DB into memory at server start."""
-    global _vision_rag_pipeline, _rag_generator
-    print("[API] Loading vision model and RAG pipeline...")
-    _vision_rag_pipeline = AgriVisionRAG()
-    _rag_generator = RAGGenerator()
-    print("[API] Ready.")
+# CORS — allow Streamlit frontend on any port during development
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # ---------------------------------------------------------------------------
@@ -113,14 +123,6 @@ def _validate_image_filename(filename: str) -> None:
 # Endpoints
 # ---------------------------------------------------------------------------
 
-from src.lab1_chatbot.chatbot import AgriculturalChatbot
-_chatbot = AgriculturalChatbot()
-
-@app.post("/chat/")
-async def chat(payload: dict) -> dict:
-    question = payload.get("question", "")
-    answer = _chatbot.ask(question)
-    return {"answer": answer}
 @app.get("/")
 async def root() -> dict[str, str]:
     """Health check endpoint."""
@@ -132,7 +134,6 @@ async def diagnose_crop(file: UploadFile = File(...)) -> dict[str, Any]:
     """Vision + RAG only — original endpoint kept for compatibility.
 
     Returns disease class, confidence, and expert RAG advice.
-    Does not run simulation or DSS.
 
     Args:
         file: Uploaded leaf image (jpg/jpeg/png).
@@ -153,7 +154,14 @@ async def diagnose_crop(file: UploadFile = File(...)) -> dict[str, Any]:
 
 @app.post("/full_analysis/")
 async def full_analysis(file: UploadFile = File(...)) -> dict[str, Any]:
-    """Full pipeline endpoint — vision, RAG, simulation and DSS."""
+    """Full pipeline endpoint — vision, RAG, simulation and DSS.
+
+    Args:
+        file: Uploaded leaf image (jpg/jpeg/png).
+
+    Returns:
+        Complete DSS report with all lab outputs.
+    """
     _validate_image_filename(file.filename)
     temp_path = _save_temp_file(file)
 
@@ -163,24 +171,11 @@ async def full_analysis(file: UploadFile = File(...)) -> dict[str, Any]:
         disease_name = vision_result["disease_class"]
         confidence = vision_result["confidence"]
 
-        # --- Step 3: Run simulation ONCE ---
-        simulation_results = run_simulation(disease_name=disease_name)
-
-        # --- Step 4: DSS using the simulation results we already have ---
+        # --- Step 3 & 4: DSS (includes simulation, scoring, and report) ---
         dss_report = run_dss(
             disease_name=disease_name,
             model_confidence=confidence,
         )
-
-        # Attach daily_counts for the dashboard spread chart
-        dss_report["scenarios"] = [
-            {
-                "intervention_name": scenario["intervention_name"],
-                "daily_counts":      scenario["daily_counts"],
-                "crop_loss_percent": scenario["crop_loss_percent"],
-            }
-            for scenario in simulation_results["scenarios"]
-        ]
 
         return dss_report
 
@@ -188,3 +183,47 @@ async def full_analysis(file: UploadFile = File(...)) -> dict[str, Any]:
         raise HTTPException(status_code=500, detail=str(error))
     finally:
         _cleanup_temp_file(temp_path)
+
+
+@app.post("/chat/")
+async def chat(payload: dict) -> dict:
+    """Chatbot Q&A endpoint.
+
+    Args:
+        payload: Dict with 'question' key.
+
+    Returns:
+        Dict with 'answer' key containing the chatbot response.
+    """
+    question = payload.get("question", "")
+    if not question.strip():
+        raise HTTPException(status_code=400, detail="Question cannot be empty.")
+    try:
+        answer = _chatbot.ask(question)
+        return {"answer": answer}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+
+@app.get("/system_info/")
+async def system_info() -> dict[str, Any]:
+    """Return system component status for the About page.
+
+    Returns:
+        Dict with component names and their status.
+    """
+    return {
+        "system": "AgriVision AI",
+        "version": "2.0.0",
+        "components": {
+            "lab1_chatbot": {"status": "active", "description": "Domain Q&A chatbot with Groq LLM"},
+            "lab2_prompts": {"status": "active", "description": "Centralized prompt template library"},
+            "lab3_data": {"status": "active", "description": "PlantVillage hybrid dataset pipeline"},
+            "lab4_rag": {"status": "active", "description": "ChromaDB + HuggingFace RAG system"},
+            "lab5_model": {"status": "active", "description": "ResNet-50 disease classifier"},
+            "lab6_gan": {"status": "available", "description": "DCGAN synthetic data generator"},
+            "lab7_simulation": {"status": "active", "description": "SIR pest spread simulation"},
+            "lab8_dashboard": {"status": "active", "description": "Streamlit visualization UI"},
+            "lab9_dss": {"status": "active", "description": "Multi-criteria decision support"},
+        },
+    }
