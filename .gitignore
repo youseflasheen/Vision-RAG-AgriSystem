@@ -41,3 +41,8 @@ desktop.ini
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+
+# Frontend (landing app)
+landing/node_modules/
+landing/.next/
+landing/.env.local
