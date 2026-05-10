@@ -1,17 +1,17 @@
 """DSS Engine — main orchestrator for the Decision Support System.
 
-This is the single entry point called by the FastAPI backend (api/main.py).
-It wires together all lab outputs in the correct order:
+Single entry point called by the FastAPI backend (api/main.py).
+Wires together vision inference, simulation, RAG, scoring, and reporting:
 
-    Lab 5 prediction + confidence
-        -> Lab 7 simulation (run_simulation)
-            -> Lab 4 RAG retrieval (ChromaDB query)
-                -> Lab 9 scoring (rank_interventions)
-                    -> Lab 9 report (build_report)
-                        -> returned to API -> Streamlit dashboard
+    ResNet-50 prediction + confidence
+        -> Spread simulation (src/simulation/simulator.py)
+            -> RAG treatment advice (src/rag/generator.py)
+                -> Intervention scoring (src/DSS/scoring.py)
+                    -> Structured report (src/DSS/report.py)
+                        -> returned to API -> frontend
 
 Usage from FastAPI:
-    from src.lab9_dss.dss_engine import run_dss
+    from src.DSS.dss_engine import run_dss
     report = run_dss(disease_name="Tomato___Septoria_leaf_spot", model_confidence=0.94)
 """
 
@@ -22,68 +22,63 @@ import os
 from typing import Any
 
 # ---------------------------------------------------------------------------
-# Path setup — allows importing sibling lab modules when called from api/
+# Path setup — allows importing sibling modules when called from api/
 # ---------------------------------------------------------------------------
 _PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-_LAB7_PATH = os.path.join(_PROJECT_ROOT, "src", "lab7_simulation")
-_LAB9_PATH = os.path.join(_PROJECT_ROOT, "src", "lab9_dss")
+_SIMULATION_PATH = os.path.join(_PROJECT_ROOT, "src", "simulation")
+_DSS_PATH = os.path.join(_PROJECT_ROOT, "src", "DSS")
 
-for _path in (_LAB7_PATH, _LAB9_PATH):
+for _path in (_SIMULATION_PATH, _DSS_PATH):
     if _path not in sys.path:
         sys.path.insert(0, _path)
 
-from simulator import run_simulation                    # Lab 7
-from scoring import rank_interventions, InterventionScore  # Lab 9
-from report import build_report                         # Lab 9
+from simulator import run_simulation
+from scoring import rank_interventions, InterventionScore
+from report import build_report
 
 
 # ---------------------------------------------------------------------------
-# RAG integration shim
+# RAG integration — calls the real RAGGenerator from src/rag/generator.py
 # ---------------------------------------------------------------------------
 
 def _query_rag(disease_name: str) -> tuple[str, float]:
-    """Retrieve treatment context from ChromaDB (Lab 4 RAG pipeline).
+    """Retrieve treatment advice from the RAG pipeline.
 
-    Attempts to import and call the existing RAG retriever from the
-    repo's src/ structure.  Falls back to a safe stub if the RAG
-    module is unavailable (e.g. ChromaDB not initialised yet).
+    Calls RAGGenerator.generate_advice() from src/rag/generator.py,
+    which queries ChromaDB and generates a Groq LLM response.
+    Falls back gracefully if the RAG service is unavailable.
 
     Args:
-        disease_name: Predicted disease class name from Lab 5.
+        disease_name: Predicted disease class name from ResNet-50.
 
     Returns:
-        Tuple of (retrieved_context_text, relevance_score).
+        Tuple of (expert_advice_markdown, relevance_score).
     """
     try:
-        # Import path matches the existing repo structure
         rag_src_path = os.path.join(_PROJECT_ROOT, "src")
         if rag_src_path not in sys.path:
             sys.path.insert(0, rag_src_path)
 
-        # The existing repo exposes a retriever in src/rag_pipeline.py
-        # Adjust the import below if the actual module name differs
-        from rag_pipeline import retrieve_context  # type: ignore[import]
+        from rag.generator import RAGGenerator  # actual module in src/rag/generator.py
 
-        context, relevance = retrieve_context(query=disease_name)
-        return str(context), float(relevance)
+        rag = RAGGenerator()
+        advice = rag.generate_advice(disease_name)
 
-    except ImportError:
-        # RAG module not reachable — return informative fallback
-        fallback_context = (
-            f"Verified protocol for {disease_name.replace('___', ' ')}: "
-            "Apply appropriate fungicide/pesticide as per local agricultural "
-            "extension guidelines. Monitor spread daily and isolate affected zones."
-        )
-        return fallback_context, 0.75   # Neutral relevance score for fallback
+        # RAGGenerator returns a markdown string — relevance is not exposed
+        # by the current implementation so we use a fixed high-confidence value
+        return str(advice), 0.90
 
     except Exception as rag_error:
-        # RAG available but query failed — log and fall back gracefully
         print(f"[DSS] RAG query failed: {rag_error}. Using fallback context.")
-        return (
-            f"Treatment protocol unavailable for {disease_name}. "
-            "Consult a local agricultural expert.",
-            0.50,
+        crop = disease_name.split("___")[0].replace("_", " ")
+        disease = disease_name.split("___")[-1].replace("_", " ") if "___" in disease_name else disease_name
+        fallback = (
+            f"## {crop} — {disease}\n\n"
+            "**Note:** Knowledge base temporarily unavailable. "
+            "General protocol: apply appropriate fungicide or pesticide per local "
+            "agricultural extension guidelines. Monitor spread daily and isolate affected zones."
         )
+        return fallback, 0.60
 
 
 # ---------------------------------------------------------------------------
@@ -100,11 +95,8 @@ def run_dss(
 ) -> dict[str, Any]:
     """Run the full Decision Support System pipeline for one detection.
 
-    Orchestrates Lab 7 (simulation), Lab 4 (RAG), Lab 9 scoring and
-    reporting into a single structured report dict.
-
     Args:
-        disease_name:      Predicted disease class from Lab 5 ResNet-50.
+        disease_name:      Predicted disease class from ResNet-50.
         model_confidence:  Softmax confidence of the prediction (0.0–1.0).
         simulation_days:   Number of days to run spread simulation.
         grid_rows:         Rows in the farm grid.
@@ -122,7 +114,47 @@ def run_dss(
             f"model_confidence must be in [0.0, 1.0], got {model_confidence}"
         )
 
-    # --- Step 1: Run spread simulation for all intervention scenarios ---
+    # --- Healthy plant short-circuit ---
+    if "healthy" in disease_name.lower():
+        crop_name = disease_name.split("___")[0].replace("_", " ")
+        return {
+            "disease_name":   disease_name,
+            "is_healthy":     True,
+            "urgency_level":  "NONE",
+            "vision_detection": {
+                "predicted_class":  disease_name,
+                "confidence":       round(model_confidence * 100, 2),
+                "confidence_label": "High Confidence" if model_confidence >= 0.75 else "Moderate Confidence",
+            },
+            "rag_treatment_protocol": {
+                "retrieved_context": (
+                    f"## {crop_name} — No Disease Detected\n\n"
+                    "Your crop appears **healthy**. No treatment is required at this time.\n\n"
+                    "**Recommended Preventive Measures:**\n"
+                    "- Continue regular monitoring every 7–10 days\n"
+                    "- Maintain proper irrigation and avoid waterlogging\n"
+                    "- Ensure good air circulation between plants\n"
+                    "- Apply balanced fertilizer per crop schedule\n"
+                    "- Keep records of field conditions for early detection"
+                ),
+                "relevance_score": 1.0,
+            },
+            "simulation_summary":    None,
+            "ranked_interventions":  [],
+            "recommendation": {
+                "best_strategy": "No Action Required",
+                "action_summary": (
+                    f"The AI system detected a healthy {crop_name} plant with "
+                    f"{model_confidence:.1%} confidence. "
+                    "No intervention is needed. Continue your current farming practices "
+                    "and schedule the next monitoring check in 7–10 days."
+                ),
+                "projected_loss": 0.0,
+            },
+            "scenarios": [],
+        }
+
+    # --- Step 1: Spread simulation ---
     print(f"[DSS] Running simulation for: {disease_name}")
     simulation_results = run_simulation(
         disease_name=disease_name,
@@ -132,11 +164,11 @@ def run_dss(
         random_seed=random_seed,
     )
 
-    # --- Step 2: Retrieve RAG treatment context ---
+    # --- Step 2: RAG treatment advice ---
     print("[DSS] Querying RAG knowledge base...")
     rag_context, rag_relevance = _query_rag(disease_name)
 
-    # --- Step 3: Score and rank intervention strategies ---
+    # --- Step 3: Score and rank interventions ---
     print("[DSS] Scoring interventions...")
     ranked_scores: list[InterventionScore] = rank_interventions(
         simulation_results=simulation_results,
@@ -144,20 +176,22 @@ def run_dss(
         rag_relevance=rag_relevance,
     )
 
-    # --- Step 4: Build the final report ---
+    # --- Step 4: Build structured report ---
     print("[DSS] Building report...")
     report = build_report(
         disease_name=disease_name,
         model_confidence=model_confidence,
-        rag_context=rag_context,
+        expert_advice=rag_context,
         rag_relevance=rag_relevance,
         simulation_results=simulation_results,
         ranked_scores=ranked_scores,
     )
 
-    print(f"[DSS] Done. Urgency: {report['urgency_level']} | "
-          f"Best strategy: {report['recommendation']['best_strategy']} | "
-          f"Projected loss: {report['recommendation']['projected_loss']}%")
+    print(
+        f"[DSS] Done. Urgency: {report['urgency_level']} | "
+        f"Best strategy: {report['recommendation']['best_strategy']} | "
+        f"Projected loss: {report['recommendation']['projected_loss']}%"
+    )
 
     return report
 
@@ -167,30 +201,19 @@ def run_dss(
 # ---------------------------------------------------------------------------
 
 def run_dss_from_api_payload(payload: dict[str, Any]) -> dict[str, Any]:
-    """Convenience wrapper for the FastAPI /diagnose endpoint.
-
-    Extracts fields from the API request payload and calls run_dss().
-
-    Expected payload keys:
-        'predicted_class'  (str)   — disease name from ResNet-50
-        'confidence'       (float) — softmax probability
-
-    Optional payload keys:
-        'simulation_days'  (int)   — default 30
-        'grid_rows'        (int)   — default 20
-        'grid_cols'        (int)   — default 20
+    """Convenience wrapper for the FastAPI /full_analysis/ endpoint.
 
     Args:
-        payload: Dict from the FastAPI request body.
+        payload: Dict with 'predicted_class' (str) and 'confidence' (float).
+                 Optional: 'simulation_days', 'grid_rows', 'grid_cols'.
 
     Returns:
         DSS report dict.
 
     Raises:
-        KeyError: If required keys are missing from payload.
+        KeyError: If required keys are missing.
     """
-    required_keys = ("predicted_class", "confidence")
-    for key in required_keys:
+    for key in ("predicted_class", "confidence"):
         if key not in payload:
             raise KeyError(f"Missing required payload key: '{key}'")
 
@@ -210,13 +233,7 @@ if __name__ == "__main__":
         disease_name="Tomato___Septoria_leaf_spot",
         model_confidence=0.94,
     )
-
-    # Print a compact version (skip long daily_counts)
-    printable = {
-        key: value
-        for key, value in test_report.items()
-        if key not in ("simulation_daily_counts",)
-    }
+    printable = {k: v for k, v in test_report.items() if k != "scenarios"}
     print(json.dumps(printable, indent=2))
     assert test_report["recommendation"]["best_strategy"] != "Unknown"
     print("\nDSS Engine smoke test passed.")

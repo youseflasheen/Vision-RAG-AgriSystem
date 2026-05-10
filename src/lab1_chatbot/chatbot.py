@@ -29,7 +29,26 @@ from src.lab2_prompts.prompt_templates import (
 # Lab 4 — RAG retriever
 from src.rag.vector_store import AgriculturalVectorDB
 
-load_dotenv()
+
+def _load_environment_variables() -> None:
+    """Load environment variables from stable project paths.
+
+    Uvicorn's reload process can run with a different working directory,
+    so relying on implicit dotenv discovery is fragile. This loader uses
+    explicit paths relative to this file.
+    """
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    candidate_files = [
+        os.path.join(project_root, ".env"),
+        os.path.join(project_root, ".env.local"),
+        os.path.join(project_root, "landing", ".env.local"),
+    ]
+    for candidate in candidate_files:
+        if os.path.exists(candidate):
+            load_dotenv(dotenv_path=candidate, override=False)
+
+
+_load_environment_variables()
 
 # Maximum conversation turns kept in memory (user + assistant pairs)
 MAX_HISTORY_TURNS: int = 6
@@ -51,6 +70,11 @@ class AgriculturalChatbot:
         model_name: str = "llama-3.3-70b-versatile",
         temperature: float = 0.3,
     ) -> None:
+        if not os.getenv("GROQ_API_KEY"):
+            raise ValueError(
+                "GROQ_API_KEY is missing. Set it in your shell or add it to "
+                "project-root/.env before starting uvicorn."
+            )
         self.llm = ChatGroq(model_name=model_name, temperature=temperature)
         self.vector_db = AgriculturalVectorDB()
         self.retriever = self.vector_db.get_retriever()

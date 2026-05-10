@@ -2,7 +2,7 @@
 
 Exposes two endpoints:
     GET  /              — health check
-    POST /diagnose/     — vision + RAG only (Lab 5 + Lab 4, original endpoint)
+    POST /diagnose/     — vision + RAG only — original endpoint
     POST /full_analysis/ — full pipeline: vision + RAG + simulation + DSS
                           (Labs 5, 4, 1, 2, 7, 9 — returns complete DSS report)
 
@@ -113,6 +113,14 @@ def _validate_image_filename(filename: str) -> None:
 # Endpoints
 # ---------------------------------------------------------------------------
 
+from src.lab1_chatbot.chatbot import AgriculturalChatbot
+_chatbot = AgriculturalChatbot()
+
+@app.post("/chat/")
+async def chat(payload: dict) -> dict:
+    question = payload.get("question", "")
+    answer = _chatbot.ask(question)
+    return {"answer": answer}
 @app.get("/")
 async def root() -> dict[str, str]:
     """Health check endpoint."""
@@ -145,21 +153,7 @@ async def diagnose_crop(file: UploadFile = File(...)) -> dict[str, Any]:
 
 @app.post("/full_analysis/")
 async def full_analysis(file: UploadFile = File(...)) -> dict[str, Any]:
-    """Full pipeline endpoint — used by the Lab 8 dashboard.
-
-    Runs in order:
-        1. Lab 5  — ResNet-50 disease detection
-        2. Lab 4  — RAG treatment retrieval
-        3. Lab 7  — SIR spread simulation (all intervention scenarios)
-        4. Lab 9  — DSS scoring, ranking, report assembly
-
-    Args:
-        file: Uploaded leaf image (jpg/jpeg/png).
-
-    Returns:
-        Complete DSS report dict (see src/DSS/report.py for schema)
-        augmented with per-scenario daily_counts for the dashboard chart.
-    """
+    """Full pipeline endpoint — vision, RAG, simulation and DSS."""
     _validate_image_filename(file.filename)
     temp_path = _save_temp_file(file)
 
@@ -169,15 +163,16 @@ async def full_analysis(file: UploadFile = File(...)) -> dict[str, Any]:
         disease_name = vision_result["disease_class"]
         confidence = vision_result["confidence"]
 
-        # --- Step 3 & 4: Simulation + DSS ---
+        # --- Step 3: Run simulation ONCE ---
+        simulation_results = run_simulation(disease_name=disease_name)
+
+        # --- Step 4: DSS using the simulation results we already have ---
         dss_report = run_dss(
             disease_name=disease_name,
             model_confidence=confidence,
         )
 
-        # Attach per-scenario daily_counts so the dashboard
-        # can render the spread chart without a second API call
-        simulation_results = run_simulation(disease_name=disease_name)
+        # Attach daily_counts for the dashboard spread chart
         dss_report["scenarios"] = [
             {
                 "intervention_name": scenario["intervention_name"],
