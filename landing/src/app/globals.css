@@ -1,32 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
-  --font-dm-mono: 'DM Mono', monospace;
-}
-
-* { box-sizing: border-box; }
-
-body {
+html, body {
   background-color: #0d1117;
   color: #e6edf3;
-  font-family: var(--font-dm-sans);
+  font-family: 'DM Sans', 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: #0d1117; }
 ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #58d68d; }
 
-/* Prose markdown styling */
-.prose h2 { color: #58d68d; margin-top: 1.2rem; font-size: 1.05rem; font-weight: 600; }
-.prose h3 { color: #e6edf3; margin-top: 1rem; font-size: 0.95rem; font-weight: 600; }
-.prose ul  { padding-left: 1.2rem; }
-.prose li  { margin-bottom: 0.3rem; color: #c9d1d9; font-size: 0.9rem; }
-.prose p   { color: #c9d1d9; font-size: 0.9rem; line-height: 1.6; }
-.prose strong { color: #e6edf3; }
+/* Markdown inside advice card */
+.prose-advice h1, .prose-advice h2 { color: #58d68d; margin: 16px 0 8px; font-size: 15px; }
+.prose-advice h3 { color: #e6edf3; margin: 12px 0 6px; font-size: 14px; }
+.prose-advice p  { color: #c9d1d9; font-size: 14px; line-height: 1.7; margin-bottom: 10px; }
+.prose-advice ul { padding-left: 18px; margin-bottom: 10px; }
+.prose-advice li { color: #c9d1d9; font-size: 14px; margin-bottom: 4px; }
+.prose-advice strong { color: #e6edf3; }
