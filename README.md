@@ -1,50 +1,44 @@
-#  AgriVision-RAG: End-to-End Autonomous Crop Diagnosis System
+# 🌾 AgriVision-RAG: End-to-End Autonomous Crop Diagnosis System
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 An industrial-grade, microservice-based AI system designed to solve the hallucination problem in agricultural AI. By integrating a **PyTorch Vision Model** with a **Retrieval-Augmented Generation (RAG)** pipeline, this system provides zero-hallucination, expert-verified treatment protocols for crop diseases.
 
 ---
 
-##  System Demo & Live Results
+## ✨ Key Features
 
-Our system seamlessly processes leaf images to provide accurate disease detection and verified treatment plans. Below are real inferences from the system:
-
-**Case Study 1: Tomato Septoria Leaf Spot**
-<table>
-  <tr>
-    <td align="center"><b>1. Image Upload</b></td>
-    <td align="center"><b>2. AI Detection</b></td>
-    <td align="center"><b>3. RAG Treatment Plan</b></td>
-  </tr>
-  <tr>
-    <td><img src="assets/tomato_upload.jpeg" width="300"></td>
-    <td><img src="assets/tomato_detection.jpeg" width="300"></td>
-    <td><img src="assets/tomato_treatment.jpeg" width="300"></td>
-  </tr>
-</table>
-
-**Case Study 2: Corn Northern Leaf Blight**
-<table>
-  <tr>
-    <td align="center"><b>1. Image Upload</b></td>
-    <td align="center"><b>2. AI Detection</b></td>
-    <td align="center"><b>3. RAG Treatment Plan</b></td>
-  </tr>
-  <tr>
-    <td><img src="assets/corn_upload.jpeg" width="300"></td>
-    <td><img src="assets/corn_detection.jpeg" width="300"></td>
-    <td><img src="assets/corn_treatment.jpeg" width="300"></td>
-  </tr>
-</table>
+- **Zero-Hallucination AI:** Traditional LLMs guess plant treatments. Our RAG pipeline retrieves strictly verified agricultural protocols from a local vector database before generating a response.
+- **Deep Learning Vision Engine:** Powered by a fine-tuned ResNet-50 PyTorch model for high-accuracy disease classification.
+- **Blazing Fast LLM:** Utilizes Llama-3 8B via the Groq LPU, ensuring near-instantaneous protocol generation.
+- **Microservices Architecture:** Fully containerized setup featuring a FastAPI backend and a responsive Streamlit frontend.
+- **Docker Ready:** Deploy the entire stack anywhere with a single `docker-compose` command.
 
 ---
 
-##  The Problem & Our Solution
+## 📸 System Demo & Live Results
+
+Our system seamlessly processes leaf images to provide accurate disease detection and verified treatment plans.
+
+### Case Study 1: Tomato Septoria Leaf Spot
+| 1. Image Upload | 2. AI Detection | 3. RAG Treatment Plan |
+|:---:|:---:|:---:|
+| <img src="assets/tomato_upload.jpeg" width="300" alt="Upload"> | <img src="assets/tomato_detection.jpeg" width="300" alt="Detection"> | <img src="assets/tomato_treatment.jpeg" width="300" alt="Treatment"> |
+
+### Case Study 2: Corn Northern Leaf Blight
+| 1. Image Upload | 2. AI Detection | 3. RAG Treatment Plan |
+|:---:|:---:|:---:|
+| <img src="assets/corn_upload.jpeg" width="300" alt="Upload"> | <img src="assets/corn_detection.jpeg" width="300" alt="Detection"> | <img src="assets/corn_treatment.jpeg" width="300" alt="Treatment"> |
+
+---
+
+## 🧠 The Problem & Our Solution
+
 Standard LLMs often "hallucinate" incorrect chemical dosages when asked about plant diseases, which can destroy crops. Traditional CNNs only classify the disease but leave the farmer without an actionable plan.
 
 **AgriVision-RAG** bridges this gap:
@@ -54,7 +48,7 @@ Standard LLMs often "hallucinate" incorrect chemical dosages when asked about pl
 
 ---
 
-##  System Architecture
+## 🏗 System Architecture
 
 ```mermaid
 graph TD
@@ -98,80 +92,82 @@ graph TD
     class D,E ml;
     class H,I rag;
     class F,G data;
-
 ```
 
-## Tech Stack
+---
 
-Deep Learning: PyTorch, Torchvision (ResNet-50)
+## 🛠 Tech Stack
 
-RAG & NLP: Sentence-Transformers (all-MiniLM-L6-v2), ChromaDB, Groq API (Llama-3-8B)
+- **Deep Learning:** PyTorch, Torchvision (ResNet-50)
+- **RAG & NLP:** Sentence-Transformers (all-MiniLM-L6-v2), ChromaDB, Groq API (Llama-3-8B)
+- **Backend:** FastAPI, Uvicorn, Pydantic
+- **Frontend:** Streamlit
+- **DevOps:** Docker, Docker Compose
 
-Backend: FastAPI, Uvicorn, Pydantic
+---
 
-Frontend: Streamlit
+## 🚀 Getting Started
 
-DevOps: Docker, Docker Compose
+### Prerequisites
+- Docker & Docker Desktop
+- Groq API Key (Get one free at [Groq.com](https://groq.com/))
 
-
-
-## Getting Started
-
-Prerequisites
-Docker & Docker Desktop
-
-Groq API Key
-
-Installation (Via Docker)
+### Installation (Via Docker)
 The easiest way to run the system in an isolated environment.
 
-Clone the repository:
-
-Clone the repository:
-
-Bash
-git clone [https://github.com/YOUR_USERNAME/Vision-RAG-AgriSystem.git](https://github.com/YOUR_USERNAME/Vision-RAG-AgriSystem.git)
+**1. Clone the repository:**
+```bash
+git clone https://github.com/YOUR_USERNAME/Vision-RAG-AgriSystem.git
 cd Vision-RAG-AgriSystem
+```
 
+**2. Set up Environment Variables:**
+Create a `.env` file in the root directory and add your API key:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+```
 
-2. **Set up Environment Variables:**
-   Create a `.env` file in the root directory and add your API key:
-   ```env
-   GROQ_API_KEY=your_groq_api_key_here
-   
-Build and Run:
-
-
-Bash
+**3. Build and Run:**
+```bash
 docker build -t agri-vision-system .
 docker run -p 8000:8000 -p 8501:8501 agri-vision-system
-Local Development (Without Docker)
-Bash
+```
 
-### 1. Create and activate virtual environment
+---
 
+### Local Development (Without Docker)
+
+**1. Create and activate virtual environment**
+```bash
 python -m venv agri_env
 source agri_env/bin/activate  # On Windows: .\agri_env\Scripts\activate
-
-### 2. Install dependencies
-
-pip install -r requirements.txt
-
-### 3. Run the FastAPI Backend
-
-uvicorn api.main:app --reload --port 8000
-
-### 4. Run the Streamlit Frontend (In a new terminal)
-
-streamlit run app/frontend.py
-
-
-## Project Structure
-
 ```
+
+**2. Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+**3. Run the FastAPI Backend**
+```bash
+uvicorn api.main:app --reload --port 8000
+```
+
+**4. Run the Streamlit Frontend (In a new terminal)**
+```bash
+streamlit run app/frontend.py
+```
+
+---
+
+## 📂 Project Structure
+
+```text
 ├── api/                  # FastAPI application & routes
 ├── app/                  # Streamlit frontend UI
+├── assets/               # Demo images and icons
 ├── data/                 # Raw, processed, and synthetic datasets
+├── docs/                 # System diagrams and presentations
 ├── models/               # PyTorch model weights (.pth)
 ├── notebooks/            # Jupyter notebooks for training (Colab)
 ├── src/                  # Core modules
@@ -190,3 +186,15 @@ streamlit run app/frontend.py
 ├── requirements.txt      # Python dependencies
 └── README.md
 ```
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/YOUR_USERNAME/Vision-RAG-AgriSystem/issues) if you want to contribute.
